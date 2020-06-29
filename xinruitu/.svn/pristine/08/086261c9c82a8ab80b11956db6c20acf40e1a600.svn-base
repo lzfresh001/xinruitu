@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.AccountLogDAO" >
+
+    <!-- 模糊查询的条件 -->
+    <sql id="getAccLogList_sql_conn">
+        <where>
+            <if test="drawing_no != null">and drawing_no like CONCAT('%', #{drawing_no }, '%')</if>
+            <if test="prj_name != null">and prj_name like CONCAT('%', #{prj_name }, '%')</if>
+        </where>
+    </sql>
+
+    <!--按要求获取生产日志列表信息-->
+    <select id="getAccLogListByPage" parameterType="pm" resultType="pm">
+        select
+            id,
+            prj_id,
+            ac_id,
+            prj_name,
+            prj_name_2nd,
+            drawing_no,
+            ac_name,
+            part_no,
+            process_type,
+            count,
+            thickness,
+            height,
+            width,
+            single_weight,
+            single_hole,
+            single_length,
+            coefficient,
+            status,
+            add_user,
+            add_time,
+            accept_user,
+            accept_time,
+            update_user,
+            update_time
+        from
+            yx_account_log
+        <include refid="getAccLogList_sql_conn"/>
+        order by
+            add_time
+		limit
+		    #{currIndex},#{pageSize}
+    </select>
+
+    <!--按要求获取生产日志列表信息条数-->
+    <select id="getAccLogListCount" parameterType="pm"  resultType="java.lang.Integer">
+        select
+            count(0)
+        from
+            yx_account_log
+        <include refid="getAccLogList_sql_conn"/>
+    </select>
+
+    <!--添加生产日志-->
+    <insert id="saveAccountLog" parameterType="pm">
+        insert into yx_account_log(
+            prj_name,
+            prj_name_2nd,
+            drawing_no,
+            ac_name,
+            part_no,
+            process_type,
+            count,
+            thickness,
+            height,
+            width,
+            <if test="single_weight!=null and single_weight!= ''">
+                single_weight,
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                single_hole,
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                single_length,
+            </if>
+            coefficient,
+            add_user,
+            add_time
+        ) values(
+            #{prj_name},
+            #{prj_name_2nd},
+            #{drawing_no},
+            #{ac_name},
+            #{part_no},
+            #{process_type},
+            #{count},
+            #{thickness},
+            #{height},
+            #{width},
+            <if test="single_weight!=null and single_weight!= ''">
+                #{single_weight},
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                #{single_hole},
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                #{single_length},
+            </if>
+            #{coefficient},
+            #{add_user},
+            #{add_time}
+        )
+    </insert>
+
+    <!--根据日志ID查看日志信息-->
+    <select id="findAccountLog" parameterType="java.lang.String" resultType="pm">
+        select * from yx_account_log where id = #{id}
+    </select>
+
+    <!--更新日志信息-->
+    <update id="editAccountLog" parameterType="pm">
+        update
+            yx_account_log
+        set
+            prj_name = #{prj_name},
+            prj_name_2nd = #{prj_name_2nd},
+            drawing_no = #{drawing_no},
+            ac_name = #{ac_name},
+            part_no = #{part_no},
+            process_type = #{process_type},
+            count = #{count},
+            thickness = #{thickness},
+            height = #{height},
+            width = #{width},
+            <if test="single_weight!=null and single_weight!= ''">
+                single_weight = #{single_weight},
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                single_hole = #{single_hole},
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                single_length = #{single_length},
+            </if>
+            coefficient = #{coefficient},
+            update_user = #{update_user},
+            update_time = #{update_time}
+        where
+            id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.AccountDAO" >
+
+    <!-- 模糊查询的条件 -->
+    <sql id="getAccList_sql_conn">
+        <where>
+            <if test="prj_name != null">and prj_name like CONCAT('%', #{prj_name }, '%')</if>
+            <if test="prj_name_2nd != null">and prj_name_2nd like CONCAT('%', #{prj_name_2nd }, '%')</if>
+            <if test="drawing_no != null">and drawing_no like CONCAT('%', #{drawing_no }, '%')</if>
+            <if test="ac_name != null">and ac_name like CONCAT('%', #{ac_name }, '%')</if>
+            <if test="part_no != null">and part_no like CONCAT('%', #{part_no }, '%')</if>
+            <if test="add_time != null">and add_time like CONCAT(#{add_time }, '%')</if>
+        </where>
+    </sql>
+
+
+    <!--按要求获取台账信息列表-->
+    <select id="getAccListByPage" parameterType="pm"  resultType="pm">
+        select * from yx_account
+        <include refid="getAccList_sql_conn"/>
+        order by
+            prj_name_2nd,add_time desc
+		limit
+		    #{currIndex},#{pageSize}
+    </select>
+
+    <!--按要求获取台账信息列表条数-->
+    <select id="getAccListCount" parameterType="pm"  resultType="java.lang.Integer">
+        select
+            count(ac_id)
+        from
+            yx_account
+        <include refid="getAccList_sql_conn"/>
+    </select>
+
+    <!--添加台账信息-->
+    <insert id="saveAccount" parameterType="pm">
+        insert into yx_account(
+            <if test="prj_name != null">
+                prj_name,
+            </if>
+            <if test="prj_name_2nd != null">
+                prj_name_2nd,
+            </if>
+            <if test="drawing_no != null">
+                drawing_no,
+            </if>
+            <if test="ac_name != null">
+                ac_name,
+            </if>
+            <if test="part_no != null">
+                part_no,
+            </if>
+            <if test="thickness != null">
+                thickness,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
+            <if test="count != null">
+                count,
+            </if>
+            add_user,
+            add_time
+        ) values(
+            <if test="prj_name != null">
+                #{prj_name},
+            </if>
+            <if test="prj_name_2nd != null">
+                #{prj_name_2nd},
+            </if>
+            <if test="drawing_no != null">
+                #{drawing_no},
+            </if>
+            <if test="ac_name != null">
+                #{ac_name},
+            </if>
+            <if test="part_no != null">
+                #{part_no},
+            </if>
+            <if test="thickness != null">
+                #{thickness},
+            </if>
+            <if test="height != null">
+                #{height},
+            </if>
+            <if test="width != null">
+                #{width},
+            </if>
+            <if test="count != null">
+                #{count},
+            </if>
+            #{add_user},
+            #{add_time}
+        )
+    </insert>
+
+    <!--根据台账ID查询台账信息-->
+    <select id="findAccount" parameterType="java.lang.String" resultType="pm">
+        select * from
+            yx_account
+        where
+            ac_id = #{ac_id}
+    </select>
+
+    <!--根据台账图号和名称检查台账信息-->
+    <select id="checkAccount" parameterType="pm" resultType="pm">
+        select * from yx_account where drawing_no = #{drawing_no} and ac_name = #{ac_name}
+    </select>
+
+    <!--编辑台账信息-->
+    <update id="editAccount" parameterType="pm">
+        update
+            yx_account
+        set
+            <if test="prj_name != null">
+                prj_name = #{prj_name},
+            </if>
+            <if test="prj_name_2nd != null">
+                prj_name_2nd = #{prj_name_2nd},
+            </if>
+            <if test="drawing_no != null">
+                drawing_no = #{drawing_no},
+            </if>
+            <if test="ac_name != null">
+                ac_name = #{ac_name},
+            </if>
+            <if test="part_no != null">
+                part_no = #{part_no},
+            </if>
+            <if test="thickness != null">
+                thickness = #{thickness},
+            </if>
+            <if test="height != null">
+                height = #{height},
+            </if>
+            <if test="width != null">
+                width = #{width},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+            add_time = #{add_time}
+        where
+            ac_id = #{ac_id}
+    </update>
+
+    <!--获取所有台账的图号-->
+    <select id="showDrawingNoList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(drawing_no)
+        from
+            yx_account
+    </select>
+
+    <!--获取所有台账的名称-->
+    <select id="showAcNameList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(ac_name)
+        from
+            yx_account
+    </select>
+
+    <!--获取所有台账的件号-->
+    <select id="showPartNoList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(part_no)
+        from
+            yx_account
+    </select>
+
+    <!--根据图号、名称、件号获取长、宽、厚-->
+    <select id="getTHWValue" parameterType="pm" resultType="pm">
+        select
+            ac_id,
+            thickness,
+            height,
+            width
+        from
+            yx_account
+        where
+            drawing_no = #{drawing_no} and part_no = #{part_no}
+    </select>
+
+</mapper>

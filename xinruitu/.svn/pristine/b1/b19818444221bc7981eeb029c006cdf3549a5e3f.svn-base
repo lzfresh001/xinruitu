@@ -1,0 +1,90 @@
+package com.yx.xinruitu.controller;
+
+import com.yx.xinruitu.controller.base.BaseController;
+import com.yx.xinruitu.entity.Const;
+import com.yx.xinruitu.entity.User;
+import com.yx.xinruitu.service.IAccountService;
+import com.yx.xinruitu.util.ParameterMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/**
+ * ClassName: AccountController
+ * Package: com.yx.xinruitu.controller
+ * Decription:
+ * <p>
+ * Date: 2019/12/10 14:50
+ * Author: lzfresh
+ */
+@Controller
+@RequestMapping("/account")
+public class AccountController extends BaseController {
+
+    @Autowired
+    private IAccountService iAccountService;
+
+
+    /**
+     * 台账管理页面路径
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    public Object list(Model model){
+        ParameterMap map = this.getParameterMap();
+        if(map.containsKey("pageNo")){
+            pageNo=Integer.valueOf(map.get("pageNo").toString());
+        }
+        model.addAttribute("DrawingNo",map.getString("drawing_no"));
+        model.addAttribute("AcName",map.getString("ac_name"));
+        model.addAttribute("AccList",iAccountService.getAccListByPage(map,pageSize,pageNo));
+        return "page/account/accList";
+    }
+
+    /**
+     * 添加台账
+     * @return
+     */
+    @RequestMapping(value="/add",method=RequestMethod.POST)
+    @ResponseBody
+    public Object add(){
+        ParameterMap pm = this.getParameterMap();
+        pm.put("add_user",((User)this.getSession().getAttribute(Const.SESSION_USER)).getName());
+        return iAccountService.add(pm);
+    }
+
+    /**
+     * 根据台账ID查询台账信息
+     * @return
+     */
+    @RequestMapping(value="/find",method=RequestMethod.GET)
+    @ResponseBody
+    public Object find(){
+        return iAccountService.find(this.getParameterMap());
+    }
+
+    /**
+     * 编辑台账信息
+     * @return
+     */
+    @RequestMapping(value="/edit",method=RequestMethod.POST)
+    @ResponseBody
+    public Object edit(){
+        return iAccountService.edit(this.getParameterMap());
+    }
+
+    /**
+     * 根据图号、名称、件号获取长、宽、厚
+     * @return
+     */
+    @RequestMapping(value="/getTHWValue",method=RequestMethod.GET)
+    @ResponseBody
+    public Object getTHWValue(){
+        return iAccountService.getTHWValue(this.getParameterMap());
+    }
+
+}

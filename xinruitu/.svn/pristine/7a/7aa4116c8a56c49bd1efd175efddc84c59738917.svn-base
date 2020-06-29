@@ -1,0 +1,171 @@
+
+var selections = document.getElementById("prj_id");
+
+
+//加载模态框的数据
+function reloadModelData(url, title, btntext, ac_id, prj_id, drawing_no, ac_name,part_no,thickness,height,width,count,type) {
+    $("#accountModal #accModelHead").text(title);
+    $("#accountModal #imgSubmit").text(btntext);
+    $("input[name='url']").val(url);
+    $("input[name='ac_id']").val(ac_id);
+    $("select[name='prj_id']").val(prj_id);
+    $("input[name='drawing_no']").val(drawing_no);
+    $("input[name='ac_name']").val(ac_name);
+    $("input[name='part_no']").val(part_no);
+    $("input[name='thickness']").val(thickness);
+    $("input[name='height']").val(height);
+    $("input[name='width']").val(width);
+    $("input[name='count']").val(count);
+}
+
+// 获取所有项目的ID和名称
+$(function () {
+    showPrjList();
+})
+
+function showPrjList(){
+
+    $.ajax({
+        type:"GET",
+        url:_ctx+"/project/getPrjName",
+        cache:false,
+        dataType:"json",
+        data:{},
+        success:function(data){
+            if(data.status == 'success'){
+                var list = data.data;
+                if(null != list){
+                    $.each(list,function (i,obj) {
+                        var option = document.createElement("option");
+                        option.value = obj.prj_id;
+                        option.text= obj.prj_name;
+                        selections.options.add(option);
+                    })
+                }
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+}
+
+//验证数据
+function checkValue(prj_id, drawing_no, ac_name,part_no,thickness,height,width,count){
+    if(prj_id == ''){
+        $("select[name='prj_id']").focus();
+        alert("请选择项目");
+        return false;
+    }
+    if(drawing_no == ''){
+        $("input[name='drawing_no']").focus();
+        alert("图号不能为空");
+        return false;
+    }
+    if(ac_name == ''){
+        $("input[name='ac_name']").focus();
+        alert("名称不能为空");
+        return false;
+    }
+    if(part_no == ''){
+        $("input[name='part_no']").focus();
+        alert("件号不能为空");
+        return false;
+    }
+    if(!/^\d+$/.test(thickness)){
+        $("input[name='thickness']").focus();
+        alert("请填写厚度(只能为正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(height)){
+        $("input[name='height']").focus();
+        alert("请填写宽度(只能为正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(width)){
+        $("input[name='width']").focus();
+        alert("请填写长度(只能为正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(count)){
+        $("input[name='count']").focus();
+        alert("请填写数量(只能为正整数)");
+        return false;
+    }
+    return true;
+}
+
+
+// 点击添加项目按钮触发
+$("#addData").click(function(){
+    reloadModelData(_ctx+"/account/add","添加台账","添加","","","","","","","","","","add");
+    $("#accountModal").modal("show");
+});
+
+//点击新增或修改的模态框确认按钮触发
+$("#imgSubmit").click(function(){
+    var url = $("input[name='url']").val();
+    var ac_id= $("input[name='ac_id']").val();
+    var prj_id = $("select[name='prj_id']").val();
+    var drawing_no= $("input[name='drawing_no']").val();
+    var ac_name= $("input[name='ac_name']").val();
+    var part_no= $("input[name='part_no']").val();
+    var thickness= $("input[name='thickness']").val();
+    var height= $("input[name='height']").val();
+    var width= $("input[name='width']").val();
+    var count= $("input[name='count']").val();
+
+    if(checkValue(prj_id, drawing_no, ac_name,part_no,thickness,height,width,count)){
+        $.ajax({
+            type:"post",
+            url:url,
+            cache:false,
+            dataType:"json",
+            data:{
+                ac_id:ac_id,
+                prj_id:prj_id,
+                drawing_no:drawing_no,
+                ac_name:ac_name,
+                part_no:part_no,
+                thickness:thickness,
+                height:height,
+                width:width,
+                count:count
+            },
+            success:function(data){
+                if(data.status == 'success'){
+                    $("#accountModal").modal("hide");
+                    location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+});
+
+// 点击修改按钮触发
+function editAccount(ac_id){
+    $.ajax({
+        type:"GET",
+        url:_ctx+"/account/find",
+        data:{ac_id:ac_id},
+        dataType:"json",
+        cache:false,
+        success:function(data){
+            if(data.status == "success"){
+                var obj = data.data;
+                reloadModelData(_ctx+"/account/edit","编辑台账","更新",obj.ac_id,obj.prj_id,obj.drawing_no,obj.ac_name,obj.part_no,obj.thickness,obj.height,obj.width,obj.count,"edit");
+                $("#accountModal").modal("show");
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+}
+
+// 点击查询按钮触发
+$("#btn_search").click(function () {
+    var drawing_no = $("#drawing_no_search").val();
+    var ac_name = $("#ac_name_search").val();
+    location.href=_ctx+"/account/list?drawing_no="+drawing_no+"&ac_name="+ac_name;
+});

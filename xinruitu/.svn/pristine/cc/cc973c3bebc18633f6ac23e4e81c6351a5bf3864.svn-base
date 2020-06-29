@@ -1,0 +1,44 @@
+.info{
+    text-align: center;
+}
+.info .info-content{
+    text-align: justify;
+}
+.info .info-tit{
+    margin: 0.6em auto;
+}
+.info .info-uname{
+    margin: 0.3em auto;
+}
+.info-content img{
+    max-width:960px;
+}
+/*----------分页-------------*/
+.footer_style1{
+    padding:0 0 0 10px;
+    font-size:13px;
+}
+
+.footer_style1 span{
+    float:left;}
+
+.ul_style3{
+    list-style:none;
+    line-height:20px;
+    text-align:center;
+    margin:0;
+    padding:0;
+    float:right;
+    font-size:13px;}
+
+.ul_style3 a{
+    color: #333;
+    text-decoration: none;}
+
+.ul_style3 a:HOVER{
+    color: #15a4b5;}
+
+.ul_style3 li{
+    float:left;
+    padding:0 5px 0 5px;
+}

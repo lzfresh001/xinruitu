@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.AccountLogDAO" >
+
+    <!-- 模糊查询的条件 -->
+    <sql id="getAccLogList_sql_conn">
+        <where>
+            <if test="logStatus != null">and yl.status in (1,2)</if>
+            <if test="drawing_no != null">and yl.drawing_no like CONCAT('%', #{drawing_no }, '%')</if>
+            <if test="prj_name != null">and yl.prj_name like CONCAT('%', #{prj_name }, '%')</if>
+        </where>
+    </sql>
+
+    <!--按要求获取生产日志列表信息-->
+    <select id="getAccLogListByPage" parameterType="pm" resultType="pm">
+        select * from yx_account_log where 1=1
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="add_user != null and add_user != ''">
+            and add_user like CONCAT( '%', #{add_user }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="add_time_l != null and add_time_l != '' and (add_time == nul or add_time == '') ">
+            and add_time = #{add_time_l}
+        </if>
+        <if test="add_time_l != null and add_time_l != '' and add_time != nul and add_time != ''">
+            and add_time between #{add_time} and #{add_time_l}
+        </if>
+        order by id desc
+        limit #{currIndex},#{pageSize}
+    </select>
+
+    <!--按要求获取生产日志列表信息条数-->
+    <select id="getAccLogListCount" parameterType="pm"  resultType="java.lang.Integer">
+        select count(0) from yx_account_log where 1=1
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="add_user != null and add_user != ''">
+            and add_user like CONCAT( '%', #{add_user }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="add_time_l != null and add_time_l != '' and (add_time == nul or add_time == '') ">
+            and add_time = #{add_time_l}
+        </if>
+        <if test="add_time_l != null and add_time_l != '' and add_time != nul and add_time != ''">
+            and add_time between #{add_time} and #{add_time_l}
+        </if>
+    </select>
+
+    <!--添加生产日志-->
+    <insert id="saveAccountLog" parameterType="pm">
+        insert into yx_account_log(
+            <if test="user_id!=null and user_id!= ''">
+                user_id,
+            </if>
+            <if test="prj_name!=null and prj_name!= ''">
+                prj_name,
+            </if>
+            <if test="prj_name_2nd!=null and prj_name_2nd!= ''">
+                prj_name_2nd,
+            </if>
+            <if test="drawing_no!=null and drawing_no!= ''">
+                drawing_no,
+            </if>
+            <if test="ac_name!=null and ac_name!= ''">
+                ac_name,
+            </if>
+            <if test="part_no!=null and part_no!= ''">
+                part_no,
+            </if>
+            <if test="process_type!=null and process_type!= ''">
+                process_type,
+            </if>
+            <if test="count!=null and count!= ''">
+                count,
+            </if>
+            <if test="thickness!=null and thickness!= ''">
+                thickness,
+            </if>
+            <if test="height!=null and height!= ''">
+                height,
+            </if>
+            <if test="width!=null and width!= ''">
+                width,
+            </if>
+            <if test="single_weight!=null and single_weight!= ''">
+                single_weight,
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                single_hole,
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                single_length,
+            </if>
+            <if test="total!=null and total!= ''">
+                total,
+            </if>
+            <if test="coefficient!=null and coefficient!= ''">
+                coefficient,
+            </if>
+            add_user,
+            add_time
+        ) values(
+            <if test="user_id!=null and user_id!= ''">
+                #{user_id},
+            </if>
+            <if test="prj_name!=null and prj_name!= ''">
+                #{prj_name},
+            </if>
+            <if test="prj_name_2nd!=null and prj_name_2nd!= ''">
+                #{prj_name_2nd},
+            </if>
+            <if test="drawing_no!=null and drawing_no!= ''">
+                #{drawing_no},
+            </if>
+            <if test="ac_name!=null and ac_name!= ''">
+                #{ac_name},
+            </if>
+            <if test="part_no!=null and part_no!= ''">
+                #{part_no},
+            </if>
+            <if test="process_type!=null and process_type!= ''">
+                #{process_type},
+            </if>
+            <if test="count!=null and count!= ''">
+                #{count},
+            </if>
+            <if test="thickness!=null and thickness!= ''">
+                #{thickness},
+            </if>
+            <if test="height!=null and height!= ''">
+                #{height},
+            </if>
+            <if test="width!=null and width!= ''">
+                #{width},
+            </if>
+            <if test="single_weight!=null and single_weight!= ''">
+                #{single_weight},
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                #{single_hole},
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                #{single_length},
+            </if>
+            <if test="total!=null and total!= ''">
+                #{total},
+            </if>
+            <if test="coefficient!=null and coefficient!= ''">
+                #{coefficient},
+            </if>
+            #{add_user},
+            #{add_time}
+        )
+    </insert>
+
+    <!--根据日志ID查看日志信息-->
+    <select id="findAccountLog" parameterType="java.lang.String" resultType="pm">
+        select * from yx_account_log where id = #{id}
+    </select>
+
+    <!--根据用户id查询该用户添加的最新日志-->
+    <select id="findLastLogByUid" parameterType="java.lang.String" resultType="pm">
+        select * from yx_account_log where id = (select MAX(id) FROM yx_account_log where user_id = #{id})
+    </select>
+
+    <!--更新日志信息-->
+    <update id="editAccountLog" parameterType="pm">
+        update
+            yx_account_log
+        set
+            <if test="prj_name!=null and prj_name!= ''">
+                prj_name = #{prj_name},
+            </if>
+            <if test="prj_name_2nd!=null and prj_name_2nd!= ''">
+                prj_name_2nd = #{prj_name_2nd},
+            </if>
+            <if test="drawing_no!=null and drawing_no!= ''">
+                drawing_no = #{drawing_no},
+            </if>
+            <if test="ac_name!=null and ac_name!= ''">
+                ac_name = #{ac_name},
+            </if>
+            <if test="part_no!=null and part_no!= ''">
+                part_no = #{part_no},
+            </if>
+            <if test="process_type!=null and process_type!= ''">
+                process_type = #{process_type},
+            </if>
+            <if test="count!=null and count!= ''">
+                count = #{count},
+            </if>
+            <if test="thickness!=null and thickness!= ''">
+                thickness = #{thickness},
+            </if>
+            <if test="height!=null and height!= ''">
+                height = #{height},
+            </if>
+            <if test="width!=null and width!= ''">
+                width = #{width},
+            </if>
+            <if test="single_weight!=null and single_weight!= ''">
+                single_weight = #{single_weight},
+            </if>
+            <if test="single_hole!=null and single_hole!= ''">
+                single_hole = #{single_hole},
+            </if>
+            <if test="single_length!=null and single_length!= ''">
+                single_length = #{single_length},
+            </if>
+            <if test="total!=null and total!= ''">
+                total = #{total},
+            </if>
+            <if test="coefficient!=null and coefficient!= ''">
+                coefficient = #{coefficient},
+            </if>
+            update_user = #{update_user},
+            update_time = #{update_time}
+        where
+            id = #{id}
+    </update>
+
+
+    <!--根据用户id查询用户日志信息-->
+    <select id="getEmpLogByUid" parameterType="pm" resultType="pm">
+        select * from yx_account_log where user_id = #{user_id}
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null and status != ''">
+            and status = #{status}
+        </if>
+        <if test="add_time != null and add_time != ''">
+            and add_time like CONCAT(#{add_time }, '%')
+        </if>
+        order by add_time desc
+        limit #{currIndex},#{pageSize}
+    </select>
+
+    <!--根据用户id查询用户日志信息条数-->
+    <select id="getEmpLogCountByUid" parameterType="pm" resultType="java.lang.Integer">
+        select count(0) from yx_account_log where user_id = #{user_id}
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null and status != ''">
+            and status = #{status}
+        </if>
+        <if test="add_time != null and add_time != ''">
+            and add_time like CONCAT(#{add_time }, '%')
+        </if>
+    </select>
+
+    <!--管理员查询日志列表-->
+    <select id="getAdminLog" parameterType="pm" resultType="pm">
+        select * from yx_account_log where status in (0,1)
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="add_user != null and add_user != ''">
+            and add_user like CONCAT( '%', #{add_user }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null  and status != '' ">
+            and status = #{status}
+        </if>
+        <if test="add_time != null and add_time != ''">
+            and add_time like CONCAT(#{add_time }, '%')
+        </if>
+        order by add_time desc
+        limit #{currIndex},#{pageSize}
+    </select>
+
+    <!--管理员查询已提交的日志列表条数-->
+    <select id="getAdminLogCount" parameterType="pm" resultType="java.lang.Integer">
+        select count(0) from yx_account_log where status in (0,1)
+        <if test="prj_name != null and prj_name != ''">
+            and prj_name like CONCAT( '%', #{prj_name }, '%')
+        </if>
+        <if test="prj_name_2nd != null and prj_name_2nd != ''">
+            and prj_name_2nd like CONCAT( '%', #{prj_name_2nd }, '%')
+        </if>
+        <if test="add_user != null and add_user != ''">
+            and add_user like CONCAT( '%', #{add_user }, '%')
+        </if>
+        <if test="process_type != null and process_type != ''">
+            and process_type = #{process_type}
+        </if>
+        <if test="status != null  and status != '' ">
+            and status = #{status}
+        </if>
+        <if test="add_time != null and add_time != ''">
+            and add_time like CONCAT(#{add_time }, '%')
+        </if>
+    </select>
+
+    <!--管理员审核通过日志-->
+    <update id="adCheckLog" parameterType="pm">
+        update
+            yx_account_log
+        set
+            status = 2,
+            <if test="reply != null">
+                reply = #{reply},
+            </if>
+            accept_user = #{accept_user},
+            accept_time = #{accept_time}
+        where
+            id = #{id}
+    </update>
+
+    <!--管理员审核通过日志(批量)-->
+    <update id="checkAccLog" parameterType="pm">
+        update
+            yx_account_log
+        set
+            status = 1,
+            accept_user = #{accept_user},
+            accept_time = #{accept_time}
+        where
+            id in (${ids})
+    </update>
+
+    <!--管理员审核回退日志-->
+    <update id="adReplyLog" parameterType="pm">
+        update
+            yx_account_log
+        set
+            status = 3,
+            <if test="reply != null">
+                reply = #{reply},
+            </if>
+            accept_user = #{accept_user},
+            accept_time = #{accept_time}
+        where
+            id = #{id}
+    </update>
+
+</mapper>

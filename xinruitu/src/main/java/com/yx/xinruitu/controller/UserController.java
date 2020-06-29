@@ -1,0 +1,123 @@
+package com.yx.xinruitu.controller;
+
+import com.yx.xinruitu.controller.base.BaseController;
+import com.yx.xinruitu.entity.Const;
+import com.yx.xinruitu.entity.User;
+import com.yx.xinruitu.service.IUserService;
+import com.yx.xinruitu.util.ParameterMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("/user")
+public class UserController extends BaseController {
+	
+	@Autowired
+	private IUserService userService;
+	
+	/**
+	 * 跳转用户页面
+	 * @return
+	 */
+	@RequestMapping(value="/list",method=RequestMethod.GET)
+	public Object list(Model model){
+		ParameterMap map=this.getParameterMap();
+		if(map.containsKey("pageNo")){
+			pageNo=Integer.valueOf(map.get("pageNo").toString());
+		}
+		map.put("status",1);
+		map.put("meid",((User)this.getSession().getAttribute(Const.SESSION_USER)).getId());
+		model.addAttribute("meid", ((User)this.getSession().getAttribute(Const.SESSION_USER)).getId());
+		model.addAttribute("username",map.get("username"));
+		model.addAttribute("name",map.get("name"));
+		model.addAttribute("result",userService.getUserListByPage(map,pageSize,pageNo));
+		return "page/user/list";
+	}
+
+	/**
+	 * 添加用户
+	 * @return
+	 */
+	@RequestMapping(value="/add",method=RequestMethod.POST)
+	@ResponseBody
+	public Object add(){
+		return userService.add(this.getParameterMap());
+	}
+	
+	
+	/**
+	 * 编辑用户
+	 * @return
+	 */
+	@RequestMapping(value="/edit",method=RequestMethod.POST)
+	@ResponseBody
+	public Object edit(){
+		return userService.edit(this.getParameterMap());
+	}
+
+
+	/**
+	 * 删除用户
+	 * @return
+	 */
+	@RequestMapping(value="/del",method=RequestMethod.POST)
+	@ResponseBody
+	public Object del(){
+		return userService.del(this.getParameterMap());
+	}
+
+	/**
+	 * 查找用户
+	 * @return
+	 */
+	@RequestMapping(value="/find",method=RequestMethod.GET)
+	@ResponseBody
+	public Object find(){
+		return userService.find(this.getParameterMap());
+	}
+	/**
+	 * 生成用户账号
+	 */
+	@RequestMapping(value="/createUsername",method=RequestMethod.GET)
+	@ResponseBody
+	public Object createUsername(){
+		return userService.createUsername();
+	}
+
+	/**
+	 * 启用用户
+	 * @return
+	 */
+	@RequestMapping(value="/reUser",method=RequestMethod.POST)
+	@ResponseBody
+	public Object reUser(){
+		return userService.reUser(this.getParameterMap());
+	}
+
+
+	/**
+	 * 转为普通工
+	 * @return
+	 */
+	@RequestMapping(value="/cutOfEmp",method=RequestMethod.POST)
+	@ResponseBody
+	public Object cutOfEmp(){
+		return userService.cutOfEmp(this.getParameterMap());
+	}
+
+	/**
+	 * 转为管理员
+	 * @return
+	 */
+	@RequestMapping(value="/cutOfAdmin",method=RequestMethod.POST)
+	@ResponseBody
+	public Object cutOfAdmin(){
+		return userService.cutOfAdmin(this.getParameterMap());
+	}
+
+
+}

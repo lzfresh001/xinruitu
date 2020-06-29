@@ -1,0 +1,99 @@
+package com.yx.xinruitu.service.impl;
+
+import com.yx.xinruitu.dao.UserDao;
+import com.yx.xinruitu.entity.msg.strategy.*;
+import com.yx.xinruitu.service.WeChatService;
+import com.yx.xinruitu.util.DateUtil;
+import com.yx.xinruitu.util.FileEveryDaySerialNumber;
+import com.yx.xinruitu.util.ParameterMap;
+import com.yx.xinruitu.util.SHA;
+import com.yx.xinruitu.util.wechat.WeChatConstant;
+import com.yx.xinruitu.util.wechat.XmlUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
+@Service
+public class WeChatServiceImpl implements WeChatService {
+    @Autowired
+    private UserDao userDao;
+    public String processRequest(HttpServletRequest request) {
+        // 默认返回的文本消息内容
+        try {
+            // 调用parseXml方法解析请求消息
+            Map<String,String> requestMap = XmlUtil.xmlToMap(request);
+            // 工厂类生产策略
+            MsgStrategy msgStrategy =null;
+
+            String type = requestMap.get(WeChatConstant.MSG_TYPE);
+            switch (type) {
+                case WeChatConstant.REQ_MESSAGE_TYPE_TEXT:
+                     new TextMsgStrategy();
+                case WeChatConstant.REQ_MESSAGE_TYPE_IMAGE:
+                    new ImageMsgStrategy();
+                case WeChatConstant.REQ_MESSAGE_TYPE_VOICE:
+                     new VoiceMsgStrategy();
+                case WeChatConstant.REQ_MESSAGE_TYPE_VIDEO:
+                     new VideoMsgStrategy();
+                case WeChatConstant.REQ_MESSAGE_TYPE_LOCATION:
+                     new LocationMsgStrategy();
+                case WeChatConstant.REQ_MESSAGE_TYPE_LINK:
+                     new LinkMsgStrategy();
+                // 事件推送
+                case WeChatConstant.REQ_MESSAGE_TYPE_EVENT:
+                    // 事件类型
+                    String eventType = requestMap.get(WeChatConstant.EVENT);
+                    switch (eventType) {
+                        case WeChatConstant.EVENT_TYPE_SUBSCRIBE: //关注事件
+                                                                            /* map.put("ToUserName", requestMap.get(WeChatConstant.FROM_USER_NAME));
+                                                                            map.put("FromUserName", requestMap.get(WeChatConstant.TO_USER_NAME));
+                                                                            map.put("MsgType", WeChatConstant.RESP_MESSAGE_TYPE_TEXT);
+                                                                            map.put("CreateTime", new Date().getTime());
+                                                                            map.put("Content", content);*/
+                            ParameterMap pm=new ParameterMap();
+                            String username=FileEveryDaySerialNumber.getValue();
+                            pm.put("username",username);
+                            pm.put("password", SHA.encryptSHA(username));
+                            pm.put("usertype",2);
+                            pm.put("status",-1);
+                            pm.put("is_bdwx",1);
+                            pm.put("bdwx_time",DateUtil.getTime());
+                            pm.put("openid",requestMap.get(WeChatConstant.FROM_USER_NAME));
+                            pm.put("add_time", DateUtil.getTime());
+                            userDao.saveUser(pm);
+                            requestMap.put("username",username);
+                            msgStrategy=new SubscribeMsgStrategy();
+                        case WeChatConstant.EVENT_TYPE_UNSUBSCRIBE:
+                           new UnsubscribeMsgStrategy();
+                        case WeChatConstant.EVENT_TYPE_SCAN:
+                             new ScanMsgStrategy();
+                        case WeChatConstant.EVENT_TYPE_LOCATION:
+                             new ReportLocationMsgStrategy();
+                        case WeChatConstant.EVENT_TYPE_CLICK:
+                            new ClickMsgStrategy();
+                    }
+                    break;
+            }
+
+
+
+
+
+
+
+
+
+            // 将策略交给执行策略的上下文
+            MsgStrategyContext context = new MsgStrategyContext(msgStrategy);
+            return context.execute(requestMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
+
+}

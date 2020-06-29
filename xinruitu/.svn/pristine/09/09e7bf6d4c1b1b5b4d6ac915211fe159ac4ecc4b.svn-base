@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+
+<section class="content-header">
+    <h1>
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>业务管理</a></li>
+        <li class="active">台账管理</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">台账管理</h3>
+            <br><br>
+           <button class="btn btn-success btn-sm" id="addData"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加台账</button>
+           <div class="btn-right">
+                <label class="form-inline">图号：<input type="text" class="form-control" th:value="${DrawingNo}"  id="drawing_no_search" autocomplete="off" /></label>
+                <label class="form-inline">名称：<input type="text" class="form-control" th:value="${AcName}"  id="ac_name_search" autocomplete="off" /></label>
+                <button class="btn btn-primary btn-sm" id="btn_search">查询</button>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="box-body">
+            <table id="dataList" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图号</th>
+                    <th>项目</th>
+                    <th>名称</th>
+                    <th>件号</th>
+                    <th>厚</th>
+                    <th>宽</th>
+                    <th>长</th>
+                    <th>数量</th>
+                    <th>添加人</th>
+                    <th>添加时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="one,stat:${AccList.data.list}">
+                    <td th:text="${stat.count}">序号</td>
+                    <td th:text="${one.drawing_no}">图号</td>
+                    <td th:text="${one.prj_name}">项目</td>
+                    <td th:text="${one.ac_name}">名称</td>
+                    <td th:text="${one.part_no}">件号</td>
+                    <td th:text="${one.thickness}">厚</td>
+                    <td th:text="${one.height}">宽</td>
+                    <td th:text="${one.width}">长</td>
+                    <td th:text="${one.count}">数量</td>
+                    <td th:text="${one.add_user}">添加人</td>
+                    <td th:text="${one.add_time}">添加时间</td>
+                    <td >
+						<span>
+							<span data-toggle="tooltip" data-placement="left" title="修改" class="btn btn-xs btn-info" th:onclick="'editAccount('+${one.ac_id}+')'"><i class="fa fa-edit"></i> 修改</span>
+						</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30" colspan="12">
+                        <div class="footer_style1">
+                            <span>共有<strong th:text="${AccList.data.recordsTotal}"></strong>条记录，当前第<strong><th:block th:text="${AccList.data.draw}"></th:block>/<th:block th:text="${AccList.data.totalpage}"></th:block></strong>页</span>
+                            <ul class="ul_style3">
+                                <li th:if="${AccList.data.draw eq 1}">
+                                    <span>首页</span>
+                                    <span>上一页</span>
+                                </li>
+                                <li th:if="${AccList.data.draw ne 1}">
+                                    <a th:href="@{/account/list(pageNo=1)}">首页</a>
+                                    <a th:href="@{/account/list(pageNo=${AccList.data.draw - 1})}">上一页</a>
+                                </li>
+                                <li th:if="${AccList.data.draw eq AccList.data.totalpage}">
+                                    <span>下一页</span>
+                                    <span>尾页</span>
+                                </li>
+                                <li th:if="${AccList.data.draw ne AccList.data.totalpage}">
+                                    <a th:href="@{/account/list(pageNo=${AccList.data.draw + 1})}">下一页</a>
+                                    <a th:href="@{/account/list(pageNo=${AccList.data.totalpage})}">尾页</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section>
+
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="accModelHead">添加台账</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  role="form">
+                    <input type="hidden" name="url" value=""/>
+                    <input type="hidden" name="ac_id" value=""/>
+                    <div class="form-group">
+                        <label for="prj_id" class="col-sm-2 control-label">项目</label>
+                        <div class="col-sm-10">
+                            <select id="prj_id" name="prj_id" class="form-control" >
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="drawing_no" class="col-sm-2 control-label">图号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="drawing_no" value="" id="drawing_no" placeholder="请输入图号">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ac_name" class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="ac_name" value="" id="ac_name" placeholder="请输入名称">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="part_no" class="col-sm-2 control-label">件号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="part_no" value="" id="part_no" placeholder="请输入件号">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thickness" class="col-sm-2 control-label">厚度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="thickness" value="" id="thickness" placeholder="请输入厚度">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height" class="col-sm-2 control-label">宽度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="height" value="" id="height" placeholder="请输入宽度">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="width" class="col-sm-2 control-label">长度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="width" value="" id="width" placeholder="请输入长度">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="count" class="col-sm-2 control-label">数量</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="count" value="" id="count" placeholder="请输入数量">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-success"  id="imgSubmit" >确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/adminlte.min.js"></script>
+<script src="/static/js/path.js"></script>
+<script src="/static/js/account.js"></script>
+</body>
+</html>

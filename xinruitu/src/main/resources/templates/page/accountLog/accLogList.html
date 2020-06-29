@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<style>
+
+    input.es-input { padding-right: 20px !important; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat; }
+    input.es-input.open {
+        -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0;
+        -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+    .es-list { position: absolute; padding: 0; margin: 0; border: 1px solid #d1d1d1; display: none; z-index: 1000; background: #fff; max-height: 160px; overflow-y: auto;
+        -moz-box-shadow: 0 2px 3px #ccc; -webkit-box-shadow: 0 2px 3px #ccc; box-shadow: 0 2px 3px #ccc; }
+    .es-list li { display: block; padding: 5px 10px; margin: 0; }
+    .es-list li.selected { background: #f3f3f3; }
+    .es-list li[disabled] { opacity: .5; }
+
+    .searchCase{
+        /*font-size: 18.5px;*/
+        width: 14%;
+        float: right;
+    }
+    .searchInputDate{
+       /* font-size: 18.5px;*/
+        width: 14%;
+        float: right;
+    }
+
+    .xdsoft_datetimepicker{
+        box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.506);
+        background: #FFFFFF;
+        border-bottom: 1px solid #BBBBBB;
+        border-left: 1px solid #CCCCCC;
+        border-right: 1px solid #CCCCCC;
+        border-top: 1px solid #CCCCCC;
+        color: #333333;
+        display: block;
+        font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        padding: 8px;
+        padding-left: 0px;
+        padding-top: 2px;
+        position: absolute;
+        z-index: 9999;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display:none;
+    }
+
+    .xdsoft_datetimepicker iframe {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 75px;
+        height: 210px;
+        background: transparent;
+        border:none;
+    }
+    /*For IE8 or lower*/
+    .xdsoft_datetimepicker button {
+        border:none !important;
+    }
+
+    .xdsoft_noselect{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+    .xdsoft_noselect::selection { background: transparent; }
+    .xdsoft_noselect::-moz-selection { background: transparent; }
+    .xdsoft_datetimepicker.xdsoft_inline{
+        display: inline-block;
+        position: static;
+        box-shadow: none;
+    }
+    .xdsoft_datetimepicker *{
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding:0px;
+        margin:0px;
+    }
+    .xdsoft_datetimepicker .xdsoft_datepicker, .xdsoft_datetimepicker  .xdsoft_timepicker{
+        display:none;
+    }
+    .xdsoft_datetimepicker .xdsoft_datepicker.active, .xdsoft_datetimepicker  .xdsoft_timepicker.active{
+        display:block;
+    }
+    .xdsoft_datetimepicker .xdsoft_datepicker{
+        width: 224px;
+        float:left;
+        margin-left:8px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_timepicker{
+        width: 58px;
+        float:left;
+        text-align:center;
+        margin-left:8px;
+        margin-top:0px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_datepicker.active+.xdsoft_timepicker{
+        margin-top:8px;
+        margin-bottom:3px
+    }
+    .xdsoft_datetimepicker  .xdsoft_mounthpicker{
+        position: relative;
+        text-align: center;
+    }
+
+    .xdsoft_datetimepicker  .xdsoft_prev, .xdsoft_datetimepicker  .xdsoft_next,.xdsoft_datetimepicker  .xdsoft_today_button{
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAAAeCAYAAACsYQl4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQjRCQjRGREU4MkNFMzExQjRDQkIyRDJDOTdBRUI1MCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpCQjg0OUYyNTZDODAxMUUzQjMwM0IwMERBNUU0ODQ5NSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpCQjg0OUYyNDZDODAxMUUzQjMwM0IwMERBNUU0ODQ5NSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkI5NzE3MjFBN0E2Q0UzMTFBQjJEQjgzMDk5RTNBNTdBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjNCNEJCNEZERTgyQ0UzMTFCNENCQjJEMkM5N0FFQjUwIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+aQvATgAAAfVJREFUeNrsmr1OwzAQxzGtkPjYEAuvVGAvfQIGRKADE49gdLwDDwBiZ2RhQUKwICQkWLsgFiRQuIBTucFJ/XFp4+hO+quqnZ4uvzj2nV2RpukCW/22yAgYNINmc7du7DcghCjrkqgOKjF1znpt6rZ0AGWQj7TvCU8d9UM+QAGDrhdyc2Bnc1WVVPBev9V8lBnY+rDwncWZThG4xk4lmxtJy2AHgoY/FySgbSBPwPZ8mEXbQx3aDERb0EbYAYFC7pcAtAvkMWwC0D3NX58S9D/YnoGC7nPWr3Dg9JTbtuHhDShBT8D2CBSK/iIEvVXxpuxSgh7DdgwUTL4iA92zmJb6lKB/YTsECmV+IgK947AGDIqgQ/LojsO135Hn51l2cWlov0JdGNrPUceueXRwilSVgkUyom9Rd6gbLfYTDeO+1v6orn0InTogYDGUkYLO3/wc9BdqqTCKP1Tfi+oTIaCBIL2TES+GTyruT9S61p6BHam+99DFEAgLFklYsIBHwSI9QY80H5ta+1rB/6ovaKihBJeEJbgLbBlQgl+j3lDPqA2tfQV1j3pVn8s+oKHGTSVJ+FqDLeR5bCqJ2E/BCycsoLZETXaKGs7rhKVt+9HZScrZNMi88V8P7LlDbvOZYaJVpMMmBCT4n0o8dTBoNgbdWPsRYACs3r7XyNfbnAAAAABJRU5ErkJggg==');
+    }
+    .xdsoft_datetimepicker  .xdsoft_prev{
+        float: left;
+        background-position:-20px 0px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_today_button{
+        float: left;
+        background-position:-70px 0px;
+        margin-left:5px;
+    }
+
+    .xdsoft_datetimepicker  .xdsoft_next{
+        float: right;
+        background-position:0px 0px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_next:active,.xdsoft_datetimepicker  .xdsoft_prev:active{
+    }
+    .xdsoft_datetimepicker  .xdsoft_next,.xdsoft_datetimepicker  .xdsoft_prev ,.xdsoft_datetimepicker  .xdsoft_today_button{
+        background-color: transparent;
+        background-repeat: no-repeat;
+        border: 0px none currentColor;
+        cursor: pointer;
+        display: block;
+        height: 30px;
+        opacity: 0.5;
+        outline: medium none currentColor;
+        overflow: hidden;
+        padding: 0px;
+        position: relative;
+        text-indent: 100%;
+        white-space: nowrap;
+        width: 20px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_prev,
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_next{
+        float:none;
+        background-position:-40px -15px;
+        height: 15px;
+        width: 30px;
+        display: block;
+        margin-left:14px;
+        margin-top:7px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_prev{
+        background-position:-40px 0px;
+        margin-bottom:7px;
+        margin-top:0px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box{
+        height:151px;
+        overflow:hidden;
+        border-bottom:1px solid #DDDDDD;
+    }
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box >div >div{
+        background: #F5F5F5;
+        border-top:1px solid #DDDDDD;
+        color: #666666;
+        font-size: 12px;
+        text-align: center;
+        border-collapse:collapse;
+        cursor:pointer;
+        border-bottom-width:0px;
+        height:25px;
+        line-height:25px;
+    }
+
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box >div > div:first-child{
+        border-top-width:0px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_today_button:hover,
+    .xdsoft_datetimepicker  .xdsoft_next:hover,
+    .xdsoft_datetimepicker  .xdsoft_prev:hover {
+        opacity: 1;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label{
+        display: inline;
+        position: relative;
+        z-index: 9999;
+        margin: 0;
+        padding: 5px 3px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: bold;
+        background-color: #fff;
+        float:left;
+        width:182px;
+        text-align:center;
+        cursor:pointer;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label:hover{
+        text-decoration:underline;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select{
+        border:1px solid #ccc;
+        position:absolute;
+        display:block;
+        right:0px;
+        top:30px;
+        z-index:101;
+        display:none;
+        background:#fff;
+        max-height:160px;
+        overflow-y:hidden;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select.xdsoft_monthselect{right:-7px;}
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select.xdsoft_yearselect{right:2px;}
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select > div > .xdsoft_option:hover{
+        color: #fff;
+        background: #ff8000;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select > div > .xdsoft_option{
+        padding:2px 10px 2px 5px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_label > .xdsoft_select > div > .xdsoft_option.xdsoft_current{
+        background: #33AAFF;
+        box-shadow: #178FE5 0px 1px 3px 0px inset;
+        color:#fff;
+        font-weight: 700;
+    }
+    .xdsoft_datetimepicker  .xdsoft_month{
+        width:90px;
+        text-align:right;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar{
+        clear:both;
+    }
+    .xdsoft_datetimepicker  .xdsoft_year{
+        width:56px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar table{
+        border-collapse:collapse;
+        width:100%;
+
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td > div{
+        padding-right:5px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar th{
+        height: 25px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td,.xdsoft_datetimepicker  .xdsoft_calendar th{
+        width:14.2857142%;
+        text-align:center;
+        background: #F5F5F5;
+        border:1px solid #DDDDDD;
+        color: #666666;
+        font-size: 12px;
+        text-align: right;
+        padding:0px;
+        border-collapse:collapse;
+        cursor:pointer;
+        height: 25px;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar th{
+        background: #F1F1F1;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_today{
+        color:#33AAFF;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_default,
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_current,
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box >div >div.xdsoft_current{
+        background: #33AAFF;
+        box-shadow: #178FE5 0px 1px 3px 0px inset;
+        color:#fff;
+        font-weight: 700;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_other_month,
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_disabled,
+    .xdsoft_datetimepicker  .xdsoft_time_box >div >div.xdsoft_disabled{
+        opacity:0.5;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_other_month.xdsoft_disabled{
+        opacity:0.2;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td:hover,
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box >div >div:hover{
+        color: #fff !important;
+        background: #ff8000 !important;
+        box-shadow: none !important;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar td.xdsoft_disabled:hover,
+    .xdsoft_datetimepicker  .xdsoft_timepicker .xdsoft_time_box >div >div.xdsoft_disabled:hover{
+        color: inherit	!important;
+        background: inherit !important;
+        box-shadow: inherit !important;
+    }
+    .xdsoft_datetimepicker  .xdsoft_calendar th{
+        font-weight: 700;
+        text-align: center;
+        color: #999;
+        cursor:default;
+    }
+    .xdsoft_datetimepicker  .xdsoft_copyright{ color:#ccc !important; font-size:10px;clear:both;float:none;margin-left:8px;}
+    .xdsoft_datetimepicker  .xdsoft_copyright a{ color:#eee !important;}
+    .xdsoft_datetimepicker  .xdsoft_copyright a:hover{ color:#aaa !important;}
+
+
+    .xdsoft_time_box{
+        position:relative;
+        border:1px solid #ccc;
+    }
+    .xdsoft_scrollbar >.xdsoft_scroller{
+        background:#ccc !important;
+        height:20px;
+        border-radius:3px;
+    }
+    .xdsoft_scrollbar{
+        position:absolute;
+        width:7px;
+        width:7px;
+        right:0px;
+        top:0px;
+        bottom:0px;
+        cursor:pointer;
+    }
+    .xdsoft_scroller_box{
+        position:relative;
+    }
+
+</style>
+<section class="content-header">
+    <h1>
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>业务管理</a></li>
+        <li class="active">报工记录</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">报工记录</h3>
+            <br><br>
+            <button class="btn btn-info btn-sm" onclick="goAddPage()" id="addData"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+            <button class="btn btn-primary btn-sm" onclick="goReAddPage()" id="reAddData"><i class="fa fa-plus"></i> &nbsp;&nbsp;继续添加</button>
+            <button class="btn btn-success btn-sm"  onclick="goCheck();"><i class="fa fa-check"></i> &nbsp;&nbsp;审核</button>
+            <br><br>
+            <span>
+
+                <select id="status_search"  name="status_search" th:value="${SearchStatus}" class="form-control searchCase" placeholder="请选择状态">
+                    <option>待审核</option>
+                    <option>已审核</option>
+                </select>
+                &nbsp;
+                <select id="process_type_search"  name="process_type_search" th:value="${SearchProcessType}" class="form-control searchCase" placeholder="请选择工序">
+                    <option>拼接板钻孔</option>
+                    <option>杆件钻孔</option>
+                    <option>磁力钻钻孔</option>
+                    <option>刨边</option>
+                    <option>焰切</option>
+                    <option>其他一</option>
+                    <option>其他二</option>
+                    <option>其他三</option>
+                    <option>其他四</option>
+                    <option>其他五</option>
+                </select>
+                &nbsp;
+                <select id="add_user_search"  name="add_user_search" th:value="${SearchUserName}" class="form-control searchCase" placeholder="请选择员工姓名">
+                    <option th:each="carna,userStat:${UserNameList}" th:value="${carna.name}" th:text="${carna.name}"></option>
+                </select>
+                &nbsp;
+                <select id="part_no_search" name="part_no_search" th:value="${SearchPartNo}" class="form-control searchCase" placeholder="请输入或选择件号">
+                    <option th:each="carpn,userStat:${PartNoList}" th:value="${carpn.part_no}" th:text="${carpn.part_no}"></option>
+                </select>
+                &nbsp;
+                <select id="prj_name_2nd_search" name="prj_name_2nd_search" th:value="${SearchPrjName2nd}" class="form-control searchCase" placeholder="请输入或选择二级名称">
+                    <option th:each="carpj2,userStat:${Prj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                </select>
+                &nbsp;
+                <select id="prj_name_search" name="prj_name_search" th:value="${SearchPrjName}" class="form-control searchCase" placeholder="请输入或选择项目名称">
+                    <option th:each="carpj,userStat:${PrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                </select>
+                <div style="clear: both"></div>
+                <br>
+                <!--<button style="float: right" class="btn btn-warning btn-sm" id="searchBtn" onclick="searchLog();"><i class="fa fa-search"></i> &nbsp;&nbsp;查询</button>-->
+            </span>
+            <span>
+                <span class="input-group searchInputDate">
+                  <input class="form-control" id="searchDateL" name="searchDateL" th:value="${SearchDataL}" placeholder="请选择结束日期"/>
+                  <span class="input-group-btn  ft-input-group-btn ft-btn-remove">
+                      <button class="btn btn-default" type="button"><span class="fa fa-calendar"></span></button>
+                  </span>
+                </span>
+
+                <span class="input-group searchInputDate">
+                  <input class="form-control" id="searchDate" name="searchDate" th:value="${SearchData}" placeholder="请选择起始日期"/>
+                  <span class="input-group-btn  ft-input-group-btn ft-btn-remove">
+                      <button class="btn btn-default" type="button"><span class="fa fa-calendar"></span></button>
+                  </span>
+                </span>
+                <div style="clear: both"></div>
+                <br>
+                <button style="float: right" class="btn btn-warning btn-sm" id="searchBtn" onclick="searchLog();"><i class="fa fa-search"></i> &nbsp;&nbsp;查询</button>
+            </span>
+        </div>
+
+        <div class="box-body">
+            <input type="checkbox" id="checkAll" name="checkAll"> <span style="font-weight: bold">全选</span>
+        </div>
+
+        <div class="box-body">
+            <table id="dataList" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>员工姓名</th>
+                        <th>工序</th>
+                        <th>项目名称</th>
+                        <th>二级名称</th>
+                        <th>图号</th>
+                        <th>件号</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>系数</th>
+                        <th>状态</th>
+                        <th>审核人</th>
+                        <th>审核时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="one,stat:${AccLogList.data.list}">
+
+                    <td>
+                        <input type="checkbox" th:value="${one.id}" id="" th:attr ="checked=${one.status eq 1?true:false}" name="chooseInfo" >
+                        <span  th:text="${stat.count}"></span>
+                    </td>
+                    <td th:text="${one.add_user}"></td>
+                    <td th:text="${one.process_type}"></td>
+                    <td th:text="${one.prj_name}"></td>
+                    <td th:text="${one.prj_name_2nd}"></td>
+                    <td th:text="${one.drawing_no}"></td>
+                    <td th:text="${one.part_no}"></td>
+                    <td th:text="${one.count}"></td>
+                    <td th:text="${one.total}"></td>
+                    <td th:text="${one.coefficient}"></td>
+                    <td th:text="${one.status eq 0?'待审核':'已审核'}"></td>
+                    <td th:text="${one.accept_user}"></td>
+                    <td th:text="${one.accept_time}"></td>
+                    <td>
+                        <button data-toggle="tooltip" data-placement="left" title="" class="btn btn-xs btn-info" th:onclick="'checkLog('+${one.id}+')'" ><i class="fa fa-edit"></i> 编辑</button>
+                        <!--<button th:if="${one.status eq 1}" data-toggle="tooltip" data-placement="left" title="" class="btn btn-xs btn-warning" th:onclick="'checkLog('+${one.id}+')'" ><i class="fa fa-eye"></i> 查看</button>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30" colspan="18">
+                        <div class="footer_style1">
+                            <span>共有<strong th:text="${AccLogList.data.recordsTotal}"></strong>条记录，当前第<strong><th:block th:text="${AccLogList.data.draw}"></th:block>/<th:block th:text="${AccLogList.data.totalpage}"></th:block></strong>页</span>
+                            <ul class="ul_style3">
+                                <li th:if="${AccLogList.data.draw eq 1}">
+                                    <span>首页</span>
+                                    <span>上一页</span>
+                                </li>
+                                <li th:if="${AccLogList.data.draw ne 1}">
+                                    <a th:href="@{/accountLog/list(pageNo=1,prj_name=${SearchPrjName},prj_name_2nd=${SearchPrjName2nd},add_user=${SearchUserName},process_type=${SearchProcessType},status=${SearchStatus},add_time=${SearchData})}" >首页</a>
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.draw - 1},prj_name=${SearchPrjName},prj_name_2nd=${SearchPrjName2nd},add_user=${SearchUserName},process_type=${SearchProcessType},status=${SearchStatus},add_time=${SearchData})}">上一页</a>
+                                </li>
+                                <li th:if="${AccLogList.data.draw eq AccLogList.data.totalpage}">
+                                    <span>下一页</span>
+                                    <span>尾页</span>
+                                </li>
+                                <li th:if="${AccLogList.data.draw ne AccLogList.data.totalpage}">
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.draw + 1},prj_name=${SearchPrjName},prj_name_2nd=${SearchPrjName2nd},add_user=${SearchUserName},process_type=${SearchProcessType},status=${SearchStatus},add_time=${SearchData})}">下一页</a>
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.totalpage},prj_name=${SearchPrjName},prj_name_2nd=${SearchPrjName2nd},add_user=${SearchUserName},process_type=${SearchProcessType},status=${SearchStatus},add_time=${SearchData})}">尾页</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section>
+
+<div class="modal fade" id="accountLogModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="accLogModelHead">添加日志</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  role="form">
+                    <input type="hidden" name="url" id="url" value=""/>
+                    <input type="hidden" name="id" value=""/>
+                    <input type="hidden" name="subType" value=""/>
+                    <div class="form-group">
+                        <label for="prj_name" class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-sm-10">
+                            <select id="prj_name" name="prj_name" class="form-control" placeholder="请输入或选择项目名称">
+                                <option th:each="carpj,userStat:${PrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prj_name_2nd" class="col-sm-2 control-label">二级名称</label>
+                        <div class="col-sm-10">
+                            <select id="prj_name_2nd" name="prj_name_2nd" class="form-control" placeholder="请输入或选择二级名称">
+                                <option th:each="carpj2,userStat:${Prj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="drawing_no" class="col-sm-2 control-label">图号</label>
+                        <div class="col-sm-10">
+                            <select id="drawing_no" name="drawing_no" onblur="dnChange();" class="form-control" placeholder="请输入或选择图号">
+                                <option th:each="car,userStat:${DrawNoList}" th:value="${car.drawing_no}" th:text="${car.drawing_no}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                   <!-- <div class="form-group">
+                        <label for="ac_name" class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <select id="ac_name" name="ac_name" onblur="anChange();" class="form-control" placeholder="请输入或选择名称">
+                                <option th:each="cart,userStat:${AcNameList}" th:value="${cart.ac_name}" th:text="${cart.ac_name}"></option>
+                            </select>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group">
+                        <label for="part_no" class="col-sm-2 control-label">件号</label>
+                        <div class="col-sm-10">
+                            <select id="part_no" name="part_no" onblur="pnoChange();" class="form-control" placeholder="请输入或选择件号">
+                                <option th:each="cartt,userStat:${PartNoList}" th:value="${cartt.part_no}" th:text="${cartt.part_no}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="process_type" class="col-sm-2 control-label">工序</label>
+                        <div class="col-sm-10">
+                            <select id="process_type" name="process_type" onblur="ptChange();" class="form-control" placeholder="请输选择工序">
+                                <option>拼接板钻孔</option>
+                                <option>杆件钻孔</option>
+                                <option>磁力钻钻孔</option>
+                                <option>刨边</option>
+                                <option>焰切</option>
+                                <option>其他一</option>
+                                <option>其他二</option>
+                                <option>其他三</option>
+                                <option>其他四</option>
+                                <option>其他五</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="count" class="col-sm-2 control-label">数量</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="count" value="" id="count" placeholder="请输入数量">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thickness" class="col-sm-2 control-label">厚度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="thickness" value="" id="thickness" placeholder="请输入厚度">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height" class="col-sm-2 control-label">宽度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="height" value="" id="height" placeholder="请输入宽度">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="width" class="col-sm-2 control-label">长度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="width" value="" id="width" placeholder="请输入宽度">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_weight_div" hidden>
+                        <label for="single_weight" class="col-sm-2 control-label">单件重量</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_weight" value="" id="single_weight" placeholder="请输入单件重量">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_hole_div" hidden>
+                        <label for="single_hole" class="col-sm-2 control-label">单件孔数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_hole" value="" id="single_hole" placeholder="请输入单件孔数">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_length_div" hidden>
+                        <label for="single_length" class="col-sm-2 control-label">单件长度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_length" value="" id="single_length" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="total_div">
+                        <label for="single_length" class="col-sm-2 control-label">小计</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" name="total" value="" id="total" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coefficient" class="col-sm-2 control-label">系数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="coefficient" value="" id="coefficient" placeholder="请输入系数">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-success"  id="imgSubmit" onclick="saveLog();" >保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/adminlte.min.js"></script>
+<script src="/static/js/path.js"></script>
+<script src="/static/js/accountLog.js"></script>
+<script src="/static/js/jquery-editable-select.js"></script>
+<script src="/static/datetimepicker/jquery.datetimepicker.js"></script>
+
+<script>
+    $('#prj_name').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_2nd').editableSelect({
+        effects: 'slide'
+    });
+    $('#drawing_no').editableSelect({
+        effects: 'slide'
+    });
+    $('#ac_name').editableSelect({
+        effects: 'slide'
+    })
+    $('#part_no').editableSelect({
+        effects: 'slide'
+    });
+    $('#process_type').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_2nd_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#process_type_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#status_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#add_user_search').editableSelect({
+        effects: 'slide'
+    });
+
+    $('#part_no_search').editableSelect({
+        effects: 'slide'
+    });
+
+    $(function () {
+        $('#searchDate').datetimepicker({
+            lang:'ch',
+            timepicker:false,
+            format:'Y-m-d',
+            clearBtn:true
+        });
+
+        $('#searchDateL').datetimepicker({
+            lang:'ch',
+            timepicker:false,
+            format:'Y-m-d',
+            clearBtn:true
+        });
+
+        $(".ft-btn-remove").click( function (){
+            $(this).prev(".yx_datetime").val("");
+        });
+    });
+</script>
+
+</body>
+</html>

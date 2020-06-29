@@ -1,0 +1,168 @@
+@charset "utf-8";
+.content{padding:0 6%;}
+.content_title{padding: 55px 40px 15px; text-align:center; font-size:26px; line-height:1.4; color:#cc0000; font-weight: normal;}
+.sub_title{ color:#333; font-size:20px; text-align:center; margin:0; line-height:30px;}
+.sub_title2{ color:#333; font-size:20px; text-align:center; margin:0; line-height:30px;}
+.content_attr{color:#666666; padding:6px 12px; background:#f5f5f5; margin:0 6%; font-size:14px;  border-bottom:#e5e5e5 1px solid;}
+.content_attr b{font-weight:normal;}
+.content_attr ul li{float: left; position: relative;}
+.content_attr ul li i{/*position: absolute; left: 0; top: 50%; margin-top: -12px;*/ width: 25px; height: 25px; background:url(/static/images/static/99.png)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/content_icon.png*/ no-repeat; vertical-align: middle; display: inline-block;}
+.content_attr ul li.date{ margin-left: -6px;}
+.content_attr ul li.ly{margin-left: 20px;}
+.content_attr ul li.ly i{background-position: 0 -25px;}
+.content_attr ul li.fontsize .l{background-position: 0 -100px;}
+.content_attr ul li.fontsize .m{background-position: 0 -75px;}
+.content_attr ul li.fontsize .s{background-position: 0 -50px;}
+.content_attr ul li.print i{background-position: 0 -125px; cursor: pointer;}
+.content_attr ul li.dianzan span{color:#F00; font-size:12px; vertical-align:bottom;}
+.content_attr ul li.dianzan i{background-position: 0 -150px; cursor: pointer;}
+.dianzan.yzan i{background-position:-25px -150px !important;}
+.content_attr ul li.jc i{background-position: 0 -175px; cursor: pointer;}
+.content_attr ul li.fx i{background-position: 0 -200px; cursor: pointer;}
+.content_attr ul li.fontsize .l:hover{background-position:-25px -100px;}
+.content_attr ul li.fontsize .m:hover{background-position:-25px -75px;}
+.content_attr ul li.fontsize .s:hover{background-position:-25px -50px;}
+.content_attr ul li.print i:hover{background-position:-25px -125px;}
+.content_attr ul li.dianzan i:hover{background-position:-25px -150px;}
+.content_attr ul li.jc i:hover{background-position:-25px -175px;}
+.content_attr ul li.fx i:hover{background-position:-25px -200px;}
+
+.content_attr ul li.llcs i{background-position: 0 -225px; margin-right: 5px;}
+.content_attr .attr_r{white-space:nowrap;}
+.content_attr .attr_r li{background:url(content_sep.gif)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/content_sep.gif*/ no-repeat left center; padding: 0 15px;}
+.content_attr span{vertical-align: middle;}
+.content_attr ul li.llcs{color: #cc0000; margin-right: -15px;}
+.content_attr ul li.fontsize i{cursor: pointer;}
+
+
+.content_article{clear:both; padding:20px; line-height:1.9; font-size:16px; font-family:"宋体"; overflow:hidden; border-bottom:#e5e5e5 1px solid; }
+.content_article p{margin:15px 0;}
+.content table, .content img, .content video{max-width:100%;}
+.content_extended{clear:both; line-height:20px; padding-bottom:50px; position: relative;}
+.content_ewm{text-align:center; padding-top:20px; border-top:#e5e5e5 1px solid;}
+.content_ewm dt{margin:0 auto; margin-bottom:8px; width:135px;}
+
+.content_attr .fx .hideDiv{position: absolute; top:25px; z-index:9; left:-58px; padding-top: 20px; display: none;}
+.content_attr .fx .hideDiv dl{border:#e5e5e5 1px solid; background: #fff; box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; border-radius: 0 0 5px 5px; width:170px; text-align: center; position: relative;}
+.content_attr .fx .hideDiv a{display: inline-block; float: none; margin:0 2px; text-indent: 0;}
+.content_attr .fx .hideDiv dt{text-align: center; padding:8px 0; font-size: 14px; font-weight: bold; color: #626262; background: #f6f6f6;}
+.content_attr .fx .hideDiv dd{padding: 5px;}
+.content_attr .fx .hideDiv dl:after{content: ''; display:block; line-height:0; font-size:0; width:0; height:0; overflow:hidden; border:8px solid transparent; border-bottom-color:#e5e5e5; position:absolute; left:50%; top:-16px; margin-left:-8px;}
+.content_attr .fx:hover .hideDiv{display: block;}
+
+.info_xgxw_title{ border-bottom:#ebebeb 1px solid; background:url(2016-icon-sidenav.gif)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/2016-icon-sidenav.gif*/ no-repeat left center; padding-left:22px; font-size:18px; font-weight:bold; height:60px; line-height:60px;}
+.info_xgxw{clear:both; }
+.info_xgxw ul{padding:15px 0 20px;}
+.info_xgxw li{ background:url(2016_icon_dot_grey-1.gif)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/2016_icon_dot_grey.gif*/ no-repeat left center; padding:0 100px 0 18px; font-size:16px; line-height:34px;  overflow:hidden; position:relative; *font-size:0;}
+.info_xgxw li *{*font-size:16px;}
+.info_xgxw li span{ position:absolute; right:0; background:#fff; top:0; color:#999999; padding-left:10px; z-index:1;}
+.info_xgxw li a{ display:block; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+.info_xgxw li a:hover{font-weight:bold;}
+
+.content_slide.isStuck{background:#f5f5f5; left:0; box-shadow: rgb(172, 172, 172) 0px 2px 4px;}
+.content_slide.isStuck .mainbox_bg{background:none;}
+.content_slide.isStuck .content_title{float:left; line-height:44px; padding:0 20px; font-size:18px; max-width:800px; overflow:hidden;}
+.content_slide.isStuck .sub_title{ display:none;}
+.content_slide.isStuck h3{display:none;}
+.content_slide.isStuck .content_attr .fl{display:none;}
+.content_slide.isStuck .attr_r{margin-top:7px;}
+.content_slide.isStuck #zhan{display:none;}
+
+/*xgxw*/
+.xgxw{width:23.5%; height:auto; float:right; margin-left:20px; background:#fff;}
+.xgxw2{display:none;}
+.xgxw_tit{border-bottom:#c6d5e9 1px solid; background:url(2016-icon-sidenav.gif)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/2016-icon-sidenav.gif*/ no-repeat 20px 22px #f7f8fa; padding:16px 22px; font-size:18px; font-weight:bold; padding-left:35px;}
+.info_xgxw2019{clear:both; }
+.info_xgxw2019 ul{}
+.info_xgxw2019 li{ background:url(2016_icon_dot_grey-1.gif)/*tpa=http://www.gz.gov.cn/gzgov/xhtml/images/2016_icon_dot_grey.gif*/ no-repeat 15px 12px; padding:0 15px 0 25px; font-size:16px; line-height:24px; margin:15px 0px;}
+.info_xgxw2019 li *{*font-size:16px;}
+
+.sfgz{padding:0px 0px 0px; width:100%}
+.sfgz_con{overflow:hidden;}
+
+
+/*xxgk_content*/
+.xxgkcontop{border:1px solid #FCD39B; background:#FEF9E6; padding:10px 20px; line-height:22px; width:91%; margin:0 auto;}
+.xxgkcontop li{float:left; width:48%; padding:4px 10px;}
+.xxgkcontop li span{ display:inline; font-weight:bold; color:#900;}
+.xxgkcontop li div{ display:inline;}
+
+/*table*/
+.commontable{border:1px solid #666; border-collapse:collapse;}
+.commontable th{padding:3px; border:1px solid #666; background:#F5F5F5}
+.commontable td{padding:3px; border:1px solid #666;}
+
+.gzrmzfgb{height:219px; padding-top:32px; margin-bottom:2px #B42C08 solid; text-align:center;}
+
+/*sitemap*/
+.sitemap{ padding:20px 0;}
+.sitemap .item{line-height:30px; overflow:hidden; zoom:1; margin-bottom:15px;}
+.sitemap .item h3{font-size:18px; display:block; background:#f0f9fe; line-height:50px; padding-left:20px;}
+.sitemap .item h3 a{display:inline-block; color:#900;}
+.sitemap .item ul{}
+.sitemap .item ul li{border-bottom:#ccc 1px dashed; padding:12px 0 12px 0; color:#c1c1c1; overflow:hidden; zoom:1;}
+.sitemap .item ul li span{ float:left;  padding:0 20px; text-indent:2em;}
+.sitemap .item ul li p{margin:0; padding-left:195px;}
+.sitemap .item ul li p a{margin:0 10px; display:inline-block;}
+.sitemap .item ul li:last-child, .sitemap .item:last-child{ border-bottom:none;}
+.sitemap a:hover{color:#bc1010;}
+
+.xgwj{height:35px; line-height:35px; background:#2e90e4; text-indent:1em; font-size:16px; font-weight:bold; color:#fff;}
+.gfxwj th{background:#F1F9FC; padding:10px;}
+.gfxwj td{padding:10px;}
+/***responsive***/
+@media (max-width: 1200px) {
+	
+	.content_attr ul{float: none; text-align: center;}
+	.content_attr ul li{float: none; display: inline-block;}
+	.content_attr li.fontsize:first-child{background: none;}
+
+}
+
+
+/*ipad*/
+@media (max-width: 992px){
+	
+}
+
+/* xs mobile*/
+@media (max-width: 768px) {
+	.container_bg{background: none; padding: 0;}
+	.container_bg .container{padding: 0;}
+	.content{padding: 0 3%;overflow: hidden;}
+	.content_attr ul li.print{display: none;}
+	.content_article{font-size: 16px;}
+	.xgxw{display:none;}
+	.xgxw2{display:block; width:100%;}
+}
+
+@media (max-width: 640px) {
+	.content_title{padding:35px 2% 15px; font-size:22px; clear:both;}
+	.content_attr{margin:0 1%;}
+	.content_attr .attr_r{display: none;}
+	.content{padding: 0 2%;}
+	.attr_r .fx{display:none;}
+	.hide{display:none;}
+
+}
+
+@media (max-width: 480px) {
+	.xxgkcontop li{ width:100%;}
+	
+	.sitemap .item ul li strong{float:none; width:100%; display:block;}
+	.sitemap .item ul li p{ padding-left:0;}
+	.contop{display:block; padding:5px 0; border-bottom:1px solid #CCC; background:#FFF; position:fixed; top:0; left:0; width:100%; z-index:10000;}
+	.contop.hide{display:none;}
+	.contop .mnlogo{display:block; margin:auto; width:188px; height:auto; }
+	.contop .mnlogo img{width:100%;}
+	.contop .allmenu{ position:absolute; top:0; right:5%; width:50px; height:50px; padding:5px 15px; font-size:36px !important;}
+	.logo, .searchbox, .menuopen{display:none !important;}
+	.mainnav{display:none}
+	.header{top:58px; position:fixed; z-index:3000;}
+	.container_bg{margin-top:58px;}
+	.hide{display:none;}
+	
+}
+@media (max-width: 340px) {
+	.contop .mnlogo{ margin:3px auto; width:168px;}
+}

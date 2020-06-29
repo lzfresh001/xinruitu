@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.StatementDAO">
+
+
+    <sql id="findList">
+        <where>
+            <if test="process_type != null ">
+                and  process_type = #{process_type}
+            </if>
+            <if test="start_date != null">
+                and DATE_FORMAT(add_time,'%y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start_date},'%y-%m-%d')
+            </if>
+            <if test="end_date != null ">
+                and  DATE_FORMAT(add_time,'%y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{end_date},'%y-%m-%d')
+            </if>
+                and  status = 1
+        </where>
+    </sql>
+
+
+    <select id="findStatementList" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+
+    <select id="findChamferingList" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findRadiagraphList" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findOne" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findTwo" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findThree" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findFour" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+
+    <select id="findFive" parameterType="pm" resultType="accountLog">
+        select
+        id,
+        prj_id,
+        ac_id,
+        prj_name,
+        prj_name_2nd,
+        drawing_no,
+        ac_name,
+        part_no,
+        process_type,
+        count,
+        thickness,
+        height,
+        width,
+        single_weight,
+        single_hole,
+        single_length,
+        coefficient,
+        status,
+        add_user,
+        add_time,
+        accept_user,
+        accept_time,
+        update_user,
+        update_time,
+        SUM(count) as sum
+        from
+        yx_account_log
+        <include refid="findList"/>
+        group by
+        drawing_no,
+        prj_name,
+        prj_name_2nd
+        order by
+        prj_name_2nd,prj_name
+    </select>
+</mapper>

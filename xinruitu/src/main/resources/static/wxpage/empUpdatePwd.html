@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>新瑞途-修改密码</title>
+    <meta name="Generator" content="vsCode">
+    <meta name="Author" content="x">
+    <meta name="Keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge chrome=1">
+    <!--IE8浏览器的显示方式：IE=edge以IE最高版本显示 Chrome=1以谷歌浏览器模式渲染-->
+    <meta name="referrer" content="never">
+    <!--告诉浏览器链接的来源（可以计算链接的访问量）-->
+    <meta name="format-detection" content="telephone=no,email=no,address=no">
+    <!--格式检测（数字，邮箱，地址）no 不识别为电话号码，邮箱，地址-->
+    <meta name="renderer" content="webkit">
+    <meta name="Description" content="">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style:none;
+        }
+        a{
+            text-decoration:none;
+        }
+        input{
+            outline-style:none;
+            border: 0px;
+        }
+        #form1{
+
+            margin-top:20px;
+            width:80%;
+            margin:2px auto;
+        }
+        #form1 form span{
+            color:#999;
+        }
+        .row {
+            margin-top: 25px;
+            height: 50px;
+            line-height: 26px;
+            border-bottom: 1px solid #c7c6c6;
+            width:100%;
+        }
+        .input {
+            position: relative;
+            width: 100%;
+            height: 26px;
+        }
+        .input input {
+            display: block;
+            width: 100%;
+            height: 26px;
+            border:none;
+            background: none;
+            outline:none;
+        }
+        .input label {
+            position: absolute;
+            top:0;
+            left:0;
+            height: 26px;
+            line-height: 26px;
+            font-size: 14px;
+            color: #999;
+        }
+        .select select{
+            display:block;
+            width:100%;
+            border:none;
+            outline:none;
+        }
+        input[type=date]::-webkit-inner-spin-button { visibility: hidden; }
+        .button{
+            width:100%;
+            height:40px;
+            background: #5eced5;
+            outline: none;
+            margin:20px 0 30px 0;
+        }
+        .button button{
+            border:0px;
+            background-color:transparent;
+            color:white;
+            width: 100%;
+            height:40px;
+            margin:0 auto;
+            font-size:17px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="form1">
+    <form action="" method="post">
+        <br>
+        <div>
+            <h2 class="modal-title text-center" id="accLogModelHead">修改密码</h2>
+        </div>
+        <div class="row ">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">姓名</span><br>
+                <input style="font-size: 120%" type="text" id="realName" name="realName" placeholder="请输入真实姓名"/><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">手机</span><br>
+                <input style="font-size: 120%" id="phone" type="text" name="phone" placeholder="请输入手机号码"/><br>
+                <i class="Phone"><b></b></i>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">新密码</span><br>
+                <input style="font-size: 120%" type="password" id="passWord" name="passWord" maxlength="9"  placeholder="请输入6&#45;&#45;9位密码"/><br>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">确认密码</span><br>
+                <input style="font-size: 120%" type="password" id="rePassWord" name="rePassWord" maxlength="9" placeholder="请确认新密码"/><br>
+            </div>
+        </div>
+        <div class="button">
+            <button style="font-size: 120%" type="button" onclick="updatePwd();">确 认 修 改</button>
+        </div>
+    </form>
+</div>
+
+<!--<div style="width: 100%;height: 100%;margin-top: 5%">
+    <div style="overflow-y: scroll;-webkit-overflow-scrolling: touch;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                &lt;!&ndash; <button type="button" class="close" data-dismiss="modal"
+                         aria-hidden="true">X</button>&ndash;&gt;
+                <h2 class="modal-title text-center" id="accLogModelHead">修改密码</h2>
+            </div>
+            <div id="form2" class="modal-body">
+                <form class="form-horizontal"  role="form">
+
+                    <div class="form-group">
+                        <label for="realName" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">姓名</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" type="text" id="realName" name="realName" placeholder="点击此处输入姓名"/><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">手机</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" id="phone" type="text" name="phone" placeholder="点击此处输入手机"/><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passWord" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">新密码</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" type="password" id="passWord" name="passWord" maxlength="9"  placeholder="请输入6&#45;&#45;9位密码"/><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rePassWord" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">确认密码</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" type="password" id="rePassWord" name="rePassWord" maxlength="9" placeholder="请确认新密码"/><br>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer"></div>
+                    <div class="button">
+                        <button style="font-size: 140%" type="button" onclick="updatePwd();">确 认 修 改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+
+   /* $('#wxUpdatePwdModal').on('shown.bs.modal', function () {
+
+        //初始化模态框高度为 屏幕高度/2
+        var modalHeight=$(window).height() / 8;
+
+        //将上面的高度设置到 modal-dialog中的margin-top属性中
+        $(this).find('.modal-dialog').css({
+            'margin-top': modalHeight
+        });
+    });
+
+    $("#wxUpdatePwdModal").modal("show");*/
+
+
+    function checkForm(realName,phone,passWord,rePassword){
+
+        if(!/^[\u4e00-\u9fa5]{2,30}$/.test(realName)){
+            alert("请输入正确的姓名");
+            return false;
+        }
+        if(!/^1[34578][0-9]\d{8}$/.test(phone)){
+            alert("请输入正确的手机号");
+            return false;
+        }
+        if(null == passWord || passWord == "" || passWord.length < 6){
+            alert("请输入6--9位新密码");
+            return false;
+        }
+        if(null == rePassword || rePassword == "" || rePassword.length < 6){
+            alert("请确认新密码");
+            return false;
+        }
+        if(passWord != rePassword){
+            alert("两次输入密码不一致");
+            return false;
+        }
+        return true;
+    }
+
+    function updatePwd() {
+        var realName = $("#realName").val();
+        var phone = $("#phone").val();
+        var passWord = $("#passWord").val();
+        var rePassWord = $("#rePassWord").val();
+        if(checkForm(realName,phone,passWord,rePassWord)){
+
+            $.ajax({
+                url:"/wx/updatePwd",
+                type:"post",
+                dataType:"json",
+                cache:false,
+                data:{
+                    realName:realName,
+                    phone:phone,
+                    passWord:passWord
+                },
+                success:function(data){
+                    if(data.status == 'success'){
+                        alert("修改成功");
+                        location.href = "/static/wxpage/wxLogin.html";
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

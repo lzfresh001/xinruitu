@@ -1,0 +1,319 @@
+package com.yx.xinruitu.service.impl;
+
+import com.yx.xinruitu.dao.UserDao;
+import com.yx.xinruitu.entity.Const;
+import com.yx.xinruitu.entity.PaginationList;
+import com.yx.xinruitu.entity.ResponseModel;
+import com.yx.xinruitu.entity.User;
+import com.yx.xinruitu.service.IUserService;
+import com.yx.xinruitu.util.*;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+@Service
+public class UserService implements IUserService {
+
+    @Autowired
+	private UserDao userDao;
+	
+	@Value("${upload.root.folder}")
+	public String root_fold;
+	
+	@Value("${img.folder}")
+	public String img_fold;
+	
+	@Value("${user.folder}")
+	public String user_folder;
+	
+	private Logger log = Logger.getLogger(this.getClass());
+
+	
+	@Override
+	public HashMap<String, Object> login(ParameterMap pm, HttpSession session) {
+		System.out.println("pm=" + pm);
+		try {
+			String psw = pm.getString("password");
+			String userName = pm.getString("username");
+			if(Tools.isEmpty(userName) || Tools.isEmpty(psw)){
+				return ResponseModel.getModel("你请求的参数错误！", "falied", null);
+			}
+			psw = SHA.encryptSHA(psw);
+			System.out.println("encode psw=" + psw);
+			pm.put("password", psw);
+			User user = userDao.getUserInfo(pm);
+			if (user == null || "".equals(user)) {
+				return ResponseModel.getModel("账户或密码错误！", "falied", null);
+			}
+			if(user.getUsertype()==2){
+				return ResponseModel.getModel("账户无登陆权限！", "falied", null);
+            }
+			if(user.getStatus().intValue()==-1){
+				return ResponseModel.getModel("此账号已锁定", "failed", null);
+			}
+			//获取用户权限
+			String userId = user.getId();
+			pm.put("user_id", userId);
+			ServletContext servletContext = session.getServletContext();
+			Map<String,User> globalUser = (Map<String, User>) servletContext.getAttribute(Const.GLOBAL_SESSION);
+			if(globalUser == null){
+				globalUser = new HashMap<String, User>();
+			}else{
+				if(globalUser.containsKey(userName)){
+					globalUser.remove(userName);
+				}
+			}
+			user.setPassword("*****");
+			globalUser.put(userName, user);
+			session.setMaxInactiveInterval(0);
+			session.setAttribute(Const.SESSION_USER, user);
+			servletContext.setAttribute(Const.GLOBAL_SESSION, globalUser);
+			userDao.saveLoginTime(userId);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("login error :" + e.getMessage(), e);
+			return ResponseModel.getModel("登录错误，请稍后重试", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+
+	@Override
+	public String logout(HttpSession session) {
+		session.removeAttribute(Const.SESSION_ALL_MENU);
+		session.removeAttribute(Const.SESSION_USER);
+		session.removeAttribute(Const.SESSION_QX);
+		return "login";
+	}
+	
+	@Override
+	public List<ParameterMap> getUserList(){
+		List<ParameterMap> list = userDao.getUserList();
+		return list;
+	}
+
+	@Override
+	public HashMap<String, Object> getUserListByPage(ParameterMap pm,Integer pageSize,Integer  currIndex) {
+		try {
+			pm.put("currIndex",(currIndex-1)*pageSize);
+			pm.put("pageSize",pageSize);
+			List<ParameterMap> list=userDao.getUserListByPage(pm);
+			Integer allcount=userDao.getUserListCount(pm);
+			PaginationList page=new PaginationList();
+			page.setList(list);
+			page.setDraw(currIndex.longValue());
+			page.setPageSize(pageSize);
+			page.setRecordsTotal(allcount!=null?allcount:0);
+			page.setTotalpage(page.getRecordsTotal() % pageSize > 0 ? (page.getRecordsTotal() / pageSize) + 1 : (page.getRecordsTotal() / pageSize));
+			return ResponseModel.getModel("ok", "success",page);
+		}catch(Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("add menu error", e);
+			return ResponseModel.getModel("error", "falied", null);
+		}
+	}
+
+
+    @Override
+	@Transactional
+	public HashMap<String, Object> add(ParameterMap pm) {
+		try {
+			String password = pm.getString("password");
+			if(Tools.isEmpty(pm.getString("username")) || Tools.isEmpty(password)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			pm.put("password", SHA.encryptSHA(password));
+			User user = userDao.getUserInfo(pm);
+			if(user != null && !Tools.isEmpty(user.getId())){
+					return ResponseModel.getModel("用户已存在", "falied", null);
+			}
+			pm.put("add_time", DateUtil.getTime());
+			userDao.saveUser(pm);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+
+	@Override
+    @Transactional
+	public HashMap<String, Object> edit(ParameterMap pm) {
+		try {
+			if(Tools.isEmpty(pm.getString("user_id"))){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			String password = pm.getString("password");
+			if(Tools.notEmpty(password)){
+				pm.put("password", SHA.encryptSHA(password));
+			}
+			userDao.editUser(pm);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+	
+
+    @Override
+    @Transactional
+	public HashMap<String, Object> del(ParameterMap pm) {
+		try {
+			String userId = pm.getString("user_id");
+			if(Tools.isEmpty(userId)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			userDao.delUser(userId);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+    @Override
+    @Transactional
+	public HashMap<String, Object> find(ParameterMap pm) {
+		try {
+			String userId = pm.getString("user_id");
+			if(Tools.isEmpty(userId)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			ParameterMap map=userDao.findUser(userId);
+			return ResponseModel.getModel("ok", "success",map);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+	}
+    @Override
+    @Transactional
+	public HashMap<String, Object> findbyusername(ParameterMap pm) {
+		try {
+			String username = pm.getString("username");
+			if(Tools.isEmpty(username)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			ParameterMap map=userDao.findUserByUsername(username);
+			return ResponseModel.getModel("ok", "success",map);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+	}
+
+	@Override
+	public HashMap<String, Object> createUsername() {
+		try {
+			String code=FileEveryDaySerialNumber.getValue4();
+			return ResponseModel.getModel("ok", "success",code);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+	}
+
+	@Override
+	public User getUserInfo(ParameterMap pm) {
+		return userDao.getUserInfo(pm);
+	}
+
+	/**
+	 * 启用用户
+	 * @param pm
+	 * @return
+	 */
+	@Override
+	public HashMap<String, Object> reUser(ParameterMap pm) {
+		try {
+			String userId = pm.getString("user_id");
+			if(Tools.isEmpty(userId)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			userDao.reUser(userId);
+		} catch (Exception e) {
+			//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+
+	/**
+	 * 获取所有员工姓名
+	 * @return
+	 */
+	@Override
+	public List<User> showUserNameList() {
+		return userDao.showUserNameList();
+	}
+
+
+	/**
+	 * 转为普通工
+	 * @param pm
+	 * @return
+	 */
+	@Override
+	public Object cutOfEmp(ParameterMap pm) {
+		try {
+			String userId = pm.getString("id");
+			if(Tools.isEmpty(userId)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			userDao.cutOfEmp(userId);
+		} catch (Exception e) {
+			//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+
+	/**
+	 * 转为管理员
+	 * @param pm
+	 * @return
+	 */
+	@Override
+	public Object cutOfAdmin(ParameterMap pm) {
+		try {
+			String userId = pm.getString("id");
+			if(Tools.isEmpty(userId)){
+				return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+			}
+			userDao.cutOfAdmin(userId);
+		} catch (Exception e) {
+			//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			log.error("error:"+e.getMessage(), e);
+			return ResponseModel.getModel("提交失败", "failed", null);
+		}
+		return ResponseModel.getModel("ok", "success", null);
+	}
+
+
+}

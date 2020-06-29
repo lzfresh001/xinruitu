@@ -1,0 +1,276 @@
+
+
+
+// 验证图号、名称、件号所选的值,获取长、宽、厚
+function getTHWValue() {
+    var drawing_no = $("#drawing_no").val();
+    var ac_name = $("#ac_name").val();
+    var part_no = $("#part_no").val();
+    if(null == drawing_no || drawing_no == ""){
+        alert("请选择或输入图号");
+        return false;
+    }
+    if(null == ac_name || ac_name == ""){
+        alert("请选择或输入名称");
+        return false;
+    }
+    if(null == part_no || part_no == ""){
+        alert("请选择或输入件号");
+        return false;
+    }
+    $.ajax({
+        type:"GET",
+        url:_ctx+"/account/getTHWValue",
+        cache:false,
+        dataType:"json",
+        data:{
+            drawing_no:drawing_no,
+            ac_name:ac_name,
+            part_no:part_no
+        },
+        success:function(data){
+            if(data.status == "success"){
+                var obj = data.data;
+                if(null != obj){
+                    $("#thickness").val(obj.thickness);
+                    $("#height").val(obj.height);
+                    $("#width").val(obj.width);
+                } else {
+                    $("#thickness").val("");
+                    $("#height").val("");
+                    $("#width").val("");
+                }
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+}
+
+// 选择图号、名称、件号触发
+function dnChange() {
+    getTHWValue();
+}
+function anChange() {
+    getTHWValue();
+}
+function pnoChange() {
+    getTHWValue();
+}
+
+// 选择工序时触发
+function ptChange() {
+    var process_type = $("#process_type").val();
+    if(process_type == "4"){
+        $("#single_weight_div").show();
+        $("#single_hole_div").hide();
+        $("#single_length_div").hide();
+    }
+    if(process_type == "1" || process_type == "2" || process_type == "3"){
+        $("#single_weight_div").hide();
+        $("#single_hole_div").show();
+        $("#single_length_div").hide();
+    }
+    if(process_type == "5"){
+        $("#single_weight_div").hide();
+        $("#single_hole_div").hide();
+        $("#single_length_div").show();
+    }
+}
+
+
+
+//加载模态框的数据
+function reloadModelData(url, title, btntext, id,
+                         prj_name,prj_name_2nd,drawing_no,ac_name,part_no,process_type,
+                         count,thickness,height,width,single_weight,single_hole,
+                         single_length,coefficient,type) {
+    $("#accountLogModal #accLogModelHead").text(title);
+    $("#accountLogModal #imgSubmit").text(btntext);
+    $("input[name='url']").val(url);
+    $("input[name='id']").val(id);
+    $("#prj_name").val(prj_name);
+    $("#prj_name_2nd").val(prj_name_2nd);
+    $("#drawing_no").val(drawing_no);
+    $("#ac_name").val(ac_name);
+    $("#part_no").val(part_no);
+    $("select[name='process_type']").val(process_type);
+    $("input[name='count']").val(count);
+    $("input[name='thickness']").val(thickness);
+    $("input[name='height']").val(height);
+    $("input[name='width']").val(width);
+    $("input[name='single_weight']").val(single_weight);
+    $("input[name='single_hole']").val(single_hole);
+    $("input[name='single_length']").val(single_length);
+    $("input[name='coefficient']").val(coefficient);
+}
+
+//验证数据
+function checkValue(prj_name_2nd,part_no,process_type,
+                    count,thickness,height,width,single_weight,single_hole,
+                    single_length,coefficient){
+    if(prj_name_2nd == ''){
+        $("input[name='prj_name_2nd']").focus();
+        alert("二级名称不能为空");
+        return false;
+    }
+    if(part_no == ''){
+        $("select[name='part_no']").focus();
+        alert("请选择件号");
+        return false;
+    }
+    if(process_type == ''){
+        $("select[name='process_type']").focus();
+        alert("请选择工序");
+        return false;
+    }
+    if(!/^\d+$/.test(count)){
+        $("input[name='count']").focus();
+        alert("请输入数量(只能是正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(thickness)){
+        $("input[name='thicknesss']").focus();
+        alert("请输入厚度(只能是正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(height)){
+        $("input[name='height']").focus();
+        alert("请输入宽度(只能是正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(width)){
+        $("input[name='width']").focus();
+        alert("请输入长度(只能是正整数)");
+        return false;
+    }
+    if(!/^\d+$/.test(coefficient)){
+        $("input[name='coefficient']").focus();
+        alert("请输入系数(只能是正整数)");
+        return false;
+    }
+    return true;
+}
+
+
+// 点击添加项目按钮触发
+$("#addData").click(function(){
+    reloadModelData(_ctx+"/accountLog/add","添加日志","添加","","","","","","","","","","","","","","","","add");
+    $("#accountLogModal").modal("show");
+});
+
+//点击新增或修改的模态框确认按钮触发
+$("#imgSubmit").click(function(){
+    var url =  $("input[name='url']").val();
+    var id = $("input[name='id']").val();
+    var prj_name = $("#prj_name").val();
+    var prj_name_2nd = $("#prj_name_2nd").val();
+    var drawing_no = $("#drawing_no").val();
+    var ac_name = $("#ac_name").val();
+    var part_no = $("#part_no").val();
+    var process_type = $("select[name='process_type']").val();
+    var count = $("input[name='count']").val();
+    var thickness = $("input[name='thickness']").val();
+    var height = $("input[name='height']").val();
+    var width = $("input[name='width']").val();
+    var single_weight = $("input[name='single_weight']").val();
+    var single_hole = $("input[name='single_hole']").val();
+    var single_length;
+    var coefficient = $("input[name='coefficient']").val();
+
+    if(process_type == "4"){
+        if(!/^-?\d+(\.\d{1,2})?$/.test(single_weight)){
+            //$("input[name='single_weight']").focus();
+            alert("请输入重量(最多包含两位小数)");
+            return false;
+        }
+    }
+    if(process_type == "1" || process_type == "2" || process_type == "3"){
+        if(!/^\d+$/.test(single_hole)){
+            //$("input[name='single_hole']").focus();
+            alert("请输入孔数(只能是正整数)");
+            return false;
+        }
+    }
+    if(process_type == "5"){
+        single_length = (parseFloat(height) + parseFloat(width)) * 2;
+    }
+    if(checkValue(prj_name_2nd,part_no,process_type,
+                    count,thickness,height,width,single_weight,single_hole,
+                    single_length,coefficient)){
+        $.ajax({
+            type:"post",
+            url:url,
+            cache:false,
+            dataType:"json",
+            data:{
+                id:id,
+                prj_name:prj_name,
+                prj_name_2nd:prj_name_2nd,
+                drawing_no:drawing_no,
+                ac_name:ac_name,
+                part_no:part_no,
+                process_type:process_type,
+                count:count,
+                thickness:thickness,
+                height:height,
+                width:width,
+                single_weight:single_weight,
+                single_hole:single_hole,
+                single_length:single_length,
+                coefficient:coefficient
+            },
+            success:function(data){
+                if(data.status == 'success'){
+                    $("#accountLogModal").modal("hide");
+                    location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+});
+
+// 点击修改按钮触发
+function editAccountLog(id){
+    $.ajax({
+        type:"GET",
+        url:_ctx+"/accountLog/find",
+        data:{id:id},
+        dataType:"json",
+        cache:false,
+        success:function(data){
+            if(data.status == "success"){
+                var aLobj = data.data;
+                reloadModelData(_ctx+"/accountLog/edit","编辑日志","更新",aLobj.id,aLobj.prj_name,aLobj.prj_name_2nd,aLobj.drawing_no,aLobj.ac_name,aLobj.part_no,aLobj.process_type,aLobj.count,aLobj.thickness,aLobj.height,aLobj.width,aLobj.single_weight,aLobj.single_hole,aLobj.single_length,
+                                aLobj.coefficient,"edit");
+                if(aLobj.process_type == "4"){
+                    $("#single_weight_div").show();
+                    $("#single_hole_div").hide();
+                    $("#single_length_div").hide();
+                }
+                if(aLobj.process_type == "1" || process_type == "2" || process_type == "3"){
+                    $("#single_weight_div").hide();
+                    $("#single_hole_div").show();
+                    $("#single_length_div").hide();
+                }
+                if(aLobj.process_type == "5"){
+                    $("#single_weight_div").hide();
+                    $("#single_hole_div").hide();
+                    $("#single_length_div").show();
+                }
+                $("#accountLogModal").modal("show");
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+}
+
+// 点击查询按钮触发
+$("#btn_search").click(function () {
+    var prj_name = $("#prj_name_search").val();
+    var drawing_no = $("#drawing_no_search").val();
+    location.href=_ctx+"/accountLog/list?prj_name="+prj_name+"&drawing_no="+drawing_no;
+});

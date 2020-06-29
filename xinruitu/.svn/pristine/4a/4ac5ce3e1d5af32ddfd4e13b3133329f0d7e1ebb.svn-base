@@ -1,0 +1,181 @@
+package com.yx.xinruitu.service.impl;
+
+import com.yx.xinruitu.dao.AccountDAO;
+import com.yx.xinruitu.entity.Account;
+import com.yx.xinruitu.entity.PaginationList;
+import com.yx.xinruitu.entity.ResponseModel;
+import com.yx.xinruitu.service.IAccountService;
+import com.yx.xinruitu.util.DateUtil;
+import com.yx.xinruitu.util.ParameterMap;
+import com.yx.xinruitu.util.Tools;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * ClassName: AccountService
+ * Package: com.yx.xinruitu.service.impl
+ * Decription:
+ * <p>
+ * Date: 2019/12/10 14:57
+ * Author: lzfresh
+ */
+@Service
+public class AccountService implements IAccountService {
+
+    @Autowired
+    private AccountDAO accountDAO;
+
+    private Logger log = Logger.getLogger(this.getClass());
+
+
+    /**
+     * 按要求获取台账信息列表
+     * @param pm
+     * @param pageSize
+     * @param currIndex
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> getAccListByPage(ParameterMap pm, int pageSize, int currIndex) {
+        try {
+            pm.put("drawing_no",pm.getString("drawing_no").toUpperCase());
+            pm.put("currIndex",(currIndex-1)*pageSize);
+            pm.put("pageSize",pageSize);
+            List<ParameterMap> list = accountDAO.getAccListByPage(pm);
+            Integer count = accountDAO.getAccListCount(pm);
+            PaginationList page = new PaginationList();
+            page.setList(list);
+            page.setDraw(currIndex);
+            page.setPageSize(pageSize);
+            page.setRecordsTotal(count!=null?count:0);
+            page.setTotalpage(page.getRecordsTotal() % pageSize > 0 ? (page.getRecordsTotal() / pageSize) + 1 : (page.getRecordsTotal() / pageSize));
+            return ResponseModel.getModel("ok", "success",page);
+        }catch(Exception e) {
+            //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            log.error("get ProList error", e);
+            return ResponseModel.getModel("error", "falied", null);
+        }
+    }
+
+    /**
+     * 添加台账
+     * @param pm
+     * @return
+     */
+    @Override
+    @Transactional
+    public HashMap<String, Object> add(ParameterMap pm) {
+        try {
+            pm.put("drawing_no",pm.getString("drawing_no").toUpperCase());
+            pm.put("part_no",pm.getString("part_no").toUpperCase());
+            pm.put("add_time", DateUtil.getTime());
+            ParameterMap parameterMap = accountDAO.checkAccount(pm);
+            if(parameterMap != null){
+                return ResponseModel.getModel("台账图号名称已存在", "falied", null);
+            }
+            accountDAO.saveAccount(pm);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            log.error("error:"+e.getMessage(), e);
+            return ResponseModel.getModel("提交失败", "failed", null);
+        }
+        return ResponseModel.getModel("ok", "success", null);
+    }
+
+    /**
+     * 根据台账ID查询台账信息
+     * @param pm
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> find(ParameterMap pm) {
+        try {
+            String ac_id = pm.getString("ac_id");
+            if(Tools.isEmpty(ac_id)){
+                return ResponseModel.getModel("你请求的是冒牌接口", "falied", null);
+            }
+            ParameterMap map = accountDAO.findAccount(ac_id);
+            return ResponseModel.getModel("ok", "success",map);
+        } catch (Exception e) {
+            //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            log.error("error:"+e.getMessage(), e);
+            return ResponseModel.getModel("提交失败", "failed", null);
+        }
+    }
+
+    /**
+     * 编辑台账信息
+     * @param pm
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> edit(ParameterMap pm) {
+        try {
+            pm.put("drawing_no",pm.getString("drawing_no").toUpperCase());
+            pm.put("part_no",pm.getString("part_no").toUpperCase());
+            accountDAO.editAccount(pm);
+        } catch (Exception e) {
+           //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            log.error("error:"+e.getMessage(), e);
+            return ResponseModel.getModel("提交失败", "failed", null);
+        }
+        return ResponseModel.getModel("ok", "success", null);
+    }
+
+    /**
+     * 获取所有台账的图号
+     * @return
+     */
+    @Override
+    public List<Account> showDrawingNoList() {
+        return  accountDAO.showDrawingNoList();
+    }
+
+    /**
+     * 获取所有台账的名称
+     * @return
+     */
+    @Override
+    public List<Account> showAcNameList() {
+        return accountDAO.showAcNameList();
+    }
+
+    /**
+     * 获取所有台账的件号
+     * @return
+     */
+    @Override
+    public List<Account> showPartNoList() {
+        return accountDAO.showPartNoList();
+    }
+
+    /**
+     * 根据图号、名称、件号获取长、宽、厚
+     * @param pm
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> getTHWValue(ParameterMap pm) {
+        try {
+            pm.put("drawing_no",pm.getString("drawing_no").toUpperCase());
+            pm.put("part_no",pm.getString("part_no").toUpperCase());
+            ParameterMap map = accountDAO.getTHWValue(pm);
+            return ResponseModel.getModel("ok", "success",map);
+        } catch (Exception e) {
+            //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            log.error("error:"+e.getMessage(), e);
+            return ResponseModel.getModel("提交失败", "failed", null);
+        }
+    }
+}

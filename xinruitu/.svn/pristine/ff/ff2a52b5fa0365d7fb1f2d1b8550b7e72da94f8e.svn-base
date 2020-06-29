@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<style>
+
+    input.es-input { padding-right: 20px !important; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat; }
+    input.es-input.open {
+        -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0;
+        -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+    .es-list { position: absolute; padding: 0; margin: 0; border: 1px solid #d1d1d1; display: none; z-index: 1000; background: #fff; max-height: 160px; overflow-y: auto;
+        -moz-box-shadow: 0 2px 3px #ccc; -webkit-box-shadow: 0 2px 3px #ccc; box-shadow: 0 2px 3px #ccc; }
+    .es-list li { display: block; padding: 5px 10px; margin: 0; }
+    .es-list li.selected { background: #f3f3f3; }
+    .es-list li[disabled] { opacity: .5; }
+
+</style>
+<section class="content-header">
+    <h1>
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>业务管理</a></li>
+        <li class="active">生产管理</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">生产管理</h3>
+            <br><br>
+           <button class="btn btn-success btn-sm" id="addData"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加日志</button>
+           <div class="btn-right">
+                <label class="form-inline">项目名称：<input type="text" class="form-control" th:value="${prjNameLog}"  id="prj_name_search" autocomplete="off" /></label>
+                <label class="form-inline">图号：<input type="text" class="form-control" th:value="${DrawingNoLog}"  id="drawing_no_search" autocomplete="off" /></label>
+                <button class="btn btn-primary btn-sm" id="btn_search">查询</button>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="box-body">
+            <table id="dataList" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目名称</th>
+                    <th>二级名称</th>
+                    <th>图号</th>
+                    <th>名称</th>
+                    <th>件号</th>
+                    <th>工序</th>
+                    <th>数量</th>
+                    <th>厚度</th>
+                    <th>宽度</th>
+                    <th>长度</th>
+                    <th>单件重量</th>
+                    <th>单件孔数</th>
+                    <th>单件长度</th>
+                    <th>系数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="one,stat:${AccLogList.data.list}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${one.prj_name}"></td>
+                    <td th:text="${one.prj_name_2nd}"></td>
+                    <td th:text="${one.drawing_no}"></td>
+                    <td th:text="${one.ac_name}"></td>
+                    <td th:text="${one.part_no}"></td>
+                    <td th:text="${one.process_type eq 1?'拼接版钻孔':(one.process_type eq 2?'杆件钻孔':(one.process_type eq 3?'磁力钻钻孔':(one.process_type eq 4?'刨边':(one.process_type eq 5?'焰切':''))))}"></td>
+                    <td th:text="${one.count}"></td>
+                    <td th:text="${one.thickness}"></td>
+                    <td th:text="${one.height}"></td>
+                    <td th:text="${one.width}"></td>
+                    <td th:text="${one.single_weight}"></td>
+                    <td th:text="${one.single_hole}"></td>
+                    <td th:text="${one.single_length}"></td>
+                    <td th:text="${one.coefficient}"></td>
+                    <td th:text="${one.status eq 0?'新增':(one.status eq 1?'已提交':(one.status eq 2?'已审核':''))}"></td>
+                    <td>
+						<span>
+							<span data-toggle="tooltip" data-placement="left" title="修改" class="btn btn-xs btn-info" th:onclick="'editAccountLog('+${one.id}+')'"><i class="fa fa-edit"></i> 编辑</span>
+						</span>
+                        <span>
+							<span data-toggle="tooltip" data-placement="left" title="修改" class="btn btn-xs btn-warning" ><i class="fa fa-send"></i> 提交</span>
+						</span>
+                        <span>
+							<span data-toggle="tooltip" data-placement="left" title="修改" class="btn btn-xs btn-success" ><i class="fa fa-check"></i> 审核</span>
+						</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30" colspan="18">
+                        <div class="footer_style1">
+                            <span>共有<strong th:text="${AccLogList.data.recordsTotal}"></strong>条记录，当前第<strong><th:block th:text="${AccLogList.data.draw}"></th:block>/<th:block th:text="${AccLogList.data.totalpage}"></th:block></strong>页</span>
+                            <ul class="ul_style3">
+                                <li th:if="${AccLogList.data.draw eq 1}">
+                                    <span>首页</span>
+                                    <span>上一页</span>
+                                </li>
+                                <li th:if="${AccLogList.data.draw ne 1}">
+                                    <a th:href="@{/accountLog/list(pageNo=1)}">首页</a>
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.draw - 1})}">上一页</a>
+                                </li>
+                                <li th:if="${AccLogList.data.draw eq AccLogList.data.totalpage}">
+                                    <span>下一页</span>
+                                    <span>尾页</span>
+                                </li>
+                                <li th:if="${AccLogList.data.draw ne AccLogList.data.totalpage}">
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.draw + 1})}">下一页</a>
+                                    <a th:href="@{/accountLog/list(pageNo=${AccLogList.data.totalpage})}">尾页</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section>
+
+<div class="modal fade" id="accountLogModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="accLogModelHead">添加日志</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  role="form">
+                    <input type="hidden" name="url" value=""/>
+                    <input type="hidden" name="id" value=""/>
+                    <div class="form-group">
+                        <label for="prj_name" class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-sm-10">
+                            <select id="prj_name" name="prj_name" class="form-control" placeholder="请输入或选择项目名称">
+                                <option th:each="carpj,userStat:${PrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prj_name_2nd" class="col-sm-2 control-label">二级名称</label>
+                        <div class="col-sm-10">
+                            <select id="prj_name_2nd" name="prj_name_2nd" class="form-control" placeholder="请输入或选择二级名称">
+                                <option th:each="carpj2,userStat:${Prj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="drawing_no" class="col-sm-2 control-label">图号</label>
+                        <div class="col-sm-10">
+                            <select id="drawing_no" name="drawing_no" onblur="dnChange();" class="form-control" placeholder="请输入或选择图号">
+                                <option th:each="car,userStat:${DrawNoList}" th:value="${car.drawing_no}" th:text="${car.drawing_no}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ac_name" class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <select id="ac_name" name="ac_name" onblur="anChange();" class="form-control" placeholder="请输入或选择名称">
+                                <option th:each="cart,userStat:${AcNameList}" th:value="${cart.ac_name}" th:text="${cart.ac_name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="part_no" class="col-sm-2 control-label">件号</label>
+                        <div class="col-sm-10">
+                            <select id="part_no" name="part_no" onblur="pnoChange();" class="form-control" placeholder="请输入或选择件号">
+                                <option th:each="cartt,userStat:${PartNoList}" th:value="${cartt.part_no}" th:text="${cartt.part_no}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="process_type" class="col-sm-2 control-label">工序</label>
+                        <div class="col-sm-10">
+                            <select id="process_type" name="process_type" onblur="ptChange();" class="form-control" >
+                                <option value="">请选择</option>
+                                <option value="1">拼接版钻孔</option>
+                                <option value="2">杆件钻孔</option>
+                                <option value="3">磁力钻钻孔</option>
+                                <option value="4">刨边</option>
+                                <option value="5">焰切</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="count" class="col-sm-2 control-label">数量</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="count" value="" id="count" placeholder="请输入数量(只能输入正整数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thickness" class="col-sm-2 control-label">厚度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="thickness" value="" id="thickness" placeholder="请输入厚度(只能输入正整数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height" class="col-sm-2 control-label">宽度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="height" value="" id="height" placeholder="请输入宽度(只能输入正整数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="width" class="col-sm-2 control-label">长度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="width" value="" id="width" placeholder="请输入宽度(只能输入正整数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_weight_div" hidden>
+                        <label for="single_weight" class="col-sm-2 control-label">单件重量</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_weight" value="" id="single_weight" placeholder="请输入单件重量(最多包含两位小数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_hole_div" hidden>
+                        <label for="single_hole" class="col-sm-2 control-label">单件孔数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_hole" value="" id="single_hole" placeholder="请输入单件孔数(只能输入正整数)">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="single_length_div" hidden>
+                        <label for="single_length" class="col-sm-2 control-label">单件长度</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="single_length" value="" id="single_length" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coefficient" class="col-sm-2 control-label">系数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="coefficient" value="" id="coefficient" placeholder="请输入系数(只能输入正整数)">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-success"  id="imgSubmit" >确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/adminlte.min.js"></script>
+<script src="/static/js/path.js"></script>
+<script src="/static/js/accountLog.js"></script>
+<script src="/static/js/jquery-editable-select.js"></script>
+
+<script>
+    $('#prj_name').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_2nd').editableSelect({
+        effects: 'slide'
+    });
+    $('#drawing_no').editableSelect({
+        effects: 'slide'
+    });
+    $('#ac_name').editableSelect({
+        effects: 'slide'
+    })
+    $('#part_no').editableSelect({
+        effects: 'slide'
+    });
+</script>
+
+</body>
+</html>

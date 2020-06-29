@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta charset="utf-8">
+		<title>新瑞途-关于我们</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/static/bower_components/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link href="/static/css/wxList.css" rel="stylesheet" />
+		<link href="/static/css/wxListmin.css" rel="stylesheet" />
+		<style>
+			.footer_style1 {
+				padding: 0 0 0 10px;
+				font-size: 13px;
+			}
+			
+			.footer_style1 span {
+				float: left;
+			}
+			
+			.ul_style3 {
+				list-style: none;
+				line-height: 20px;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				float: right;
+				font-size: 13px;
+			}
+			
+			.ul_style3 a {
+				color: #333;
+				text-decoration: none;
+			}
+			
+			.ul_style3 a:HOVER {
+				color: #15a4b5;
+			}
+			
+			.ul_style3 li {
+				float: left;
+				padding: 0 5px 0 5px;
+			}
+
+            input[type=date]::-webkit-inner-spin-button{visibility: hidden;}
+
+            #searchInput{
+                float: left;
+            }
+            .searchBtn{
+                margin-left: 3px;
+                width: 70px;
+                height: 40px;
+                font-size: 10px;
+                font-family: 'Helvetica Neue';
+                background-color: #20c997;
+                color: #F9F9F9;
+                float: right;
+            }
+
+            #addBtn{
+                float: right;
+            }
+
+            input.es-input { padding-right: 20px !important; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat; }
+            input.es-input.open {
+                -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0;
+                -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+            .es-list { position: absolute; padding: 0; margin: 0; border: 1px solid #d1d1d1; display: none; z-index: 1000; background: #fff; max-height: 160px; overflow-y: auto;
+                -moz-box-shadow: 0 2px 3px #ccc; -webkit-box-shadow: 0 2px 3px #ccc; box-shadow: 0 2px 3px #ccc; }
+            .es-list li { display: block; padding: 5px 10px; margin: 0; }
+            .es-list li.selected { background: #f3f3f3; }
+            .es-list li[disabled] { opacity: .5; }
+
+
+
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<ul class="mui-table-view" style="padding-top: 20px;padding-bottom: 20px">
+				<li class="mui-table-view-cell">
+					<div class="mui-pull-left userinfoinimg">
+						<img src="">
+					</div>
+					<div>
+						<p>&nbsp;</p>
+						<p style="font-size: 125%;font-weight: bold;color: #0a0a0a">宝鸡新瑞途科工贸有限公司</p>
+						<p>&nbsp;</p>
+					</div>
+				</li>
+            </ul>
+		</div>
+
+
+		<div class="mui-active">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<br>
+					<div class="peplinfo">
+						<div style="font-size: 110%;font-weight: bold"><i class="fa fa-home"></i> 公司简介：</div>
+						<span style="padding-left: 10%">本公司致力于，钢结构制作、销售；桥梁设备配件、船舶舾装件的制造、销售；电焊、钣金、油漆服务；机械加工；电器设备、机械配件加工、销售；机械制图；工具设备的研发、制作、销售；劳务分包等业务。</span><br>
+					</div>
+					<br>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class="mui-active">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+
+					<div class="peplinfo">
+						<span style="font-size: 110%;font-weight: bold"><i class="fa fa-phone"></i> 电话：</span>
+						<span>18691727078</span>
+					</div>
+
+					<div class="peplinfo">
+						<span style="font-size: 110%;font-weight: bold"><i class="fa fa-map-marker"></i>&nbsp; 地址：</span>
+						<span>陕西省宝鸡市高新开发区</span><br>
+						<span style="padding-left: 19%">高新大道50号院1幢B座1927号</span>
+					</div>
+
+				</li>
+			</ul>
+		</div>
+
+
+	</body>
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/static/dist/js/adminlte.min.js"></script>
+    <script src="/static/js/jquery-editable-select.js"></script>
+<script>
+
+</script>
+
+</html>

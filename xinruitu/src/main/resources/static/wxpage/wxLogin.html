@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>新瑞途-员工登陆</title>
+    <meta name="Generator" content="vsCode">
+    <meta name="Author" content="x">
+    <meta name="Keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge chrome=1">
+    <!--IE8浏览器的显示方式：IE=edge以IE最高版本显示 Chrome=1以谷歌浏览器模式渲染-->
+    <meta name="referrer" content="never">
+    <!--告诉浏览器链接的来源（可以计算链接的访问量）-->
+    <meta name="format-detection" content="telephone=no,email=no,address=no">
+    <!--格式检测（数字，邮箱，地址）no 不识别为电话号码，邮箱，地址-->
+    <meta name="renderer" content="webkit">
+    <meta name="Description" content="">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style:none;
+        }
+        a{
+            text-decoration:none;
+        }
+        input{
+            outline-style:none;
+            border: 0px;
+        }
+        #form1{
+
+            margin-top:20px;
+            width:80%;
+            margin:2px auto;
+        }
+        #form1 form span{
+            color:#999;
+        }
+        .row {
+            margin-top: 25px;
+            height: 50px;
+            line-height: 26px;
+            border-bottom: 1px solid #c7c6c6;
+            width:100%;
+        }
+        .input {
+            position: relative;
+            width: 100%;
+            height: 26px;
+        }
+        .input input {
+            display: block;
+            width: 100%;
+            height: 26px;
+            border:none;
+            background: none;
+            outline:none;
+        }
+        .input label {
+            position: absolute;
+            top:0;
+            left:0;
+            height: 26px;
+            line-height: 26px;
+            font-size: 14px;
+            color: #999;
+        }
+        .select select{
+            display:block;
+            width:100%;
+            border:none;
+            outline:none;
+        }
+        input[type=date]::-webkit-inner-spin-button { visibility: hidden; }
+        .button{
+            width:100%;
+            height:40px;
+            background: #50a688;
+            outline: none;
+            margin:20px 0 30px 0;
+        }
+        .button button{
+            border:0px;
+            background-color:transparent;
+            color:white;
+            width: 100%;
+            height:40px;
+            margin:0 auto;
+            font-size:17px;
+        }
+
+        html,body{
+
+            /*height:100%*/
+        }
+        /*body{
+            background:url("/static/images/bg.png") no-repeat;
+            background-size: 100%;
+        }*/
+
+    </style>
+</head>
+
+<body>
+<div id="form1">
+    <form action="" method="post">
+        <br>
+        <div>
+            <h2 class="modal-title text-center" id="accLogModelHead">员工登陆</h2>
+        </div>
+        <div class="row ">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">账号</span><br>
+                <input style="font-size: 120%" type="text" id="userName" name="userName" placeholder="请输入账号"/><br>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="input">
+                <span style="font-size: 130%;font-weight: bold;">密码</span><br>
+                <input style="font-size: 120%" type="password" id="passWord" name="passWord" placeholder="请输入密码"/><br>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="checkbox">
+                <input style="font-size: 130%;font-weight: bold;" type="checkbox" id="remember" name="rememberMe" > 记住我&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </div>
+
+        <div class="button">
+            <button style="font-size: 120%" type="button" onclick="wxLogin();">登陆</button>
+        </div>
+    </form>
+</div>
+
+<!--<div style="width: 100%;height: 100%;margin-top: 10%">
+    <div style="overflow-y: scroll;-webkit-overflow-scrolling: touch;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                &lt;!&ndash; <button type="button" class="close" data-dismiss="modal"
+                         aria-hidden="true">X</button>&ndash;&gt;
+                <h2 class="modal-title text-center" id="accLogModelHead">员工登陆</h2>
+            </div>
+            <div id="form2" class="modal-body">
+                <form class="form-horizontal"  role="form">
+
+                    <div class="form-group">
+                        <label for="userName" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">账 号</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" type="text" id="userName" name="userName" placeholder="点击此处输入账号"/><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passWord" class="col-sm-2 control-label" style="font-size: 140%;font-weight: bold">密 码</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input style="font-size: 130%" type="password" id="passWord" name="passWord" placeholder="点击此处输入密码"/><br>
+                        </div>
+                    </div>
+
+                    <div class="checkbox" style="font-size: 110%;font-weight: bold">
+                        <input  type="checkbox" id="remember" name="rememberMe" > 记住我&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="modal-footer"></div>
+                    <div class="button">
+                        <button style="font-size: 140%" type="button" onclick="wxLogin();">登 &nbsp;&nbsp;&nbsp;&nbsp; 陆</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>-->
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/jquery/dist/jquery.cookie.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    /*$('#wxLoginModal').on('shown.bs.modal', function () {
+
+        //初始化模态框高度为 屏幕高度/2
+        var modalHeight=$(window).height() / 5;
+
+        //将上面的高度设置到 modal-dialog中的margin-top属性中
+        $(this).find('.modal-dialog').css({
+            'margin-top': modalHeight
+        });
+    });
+
+    $("#wxLoginModal").modal("show");*/
+
+    // 记住密码
+    $(document).ready(function(){
+        var rem = $.cookie("remember");
+        if(rem){
+            $("#remember").prop("checked",true);
+            $("#userName").val($.cookie("userName"));
+            $("#passWord").val($.cookie("passWord"));
+        }
+    });
+
+    function checkForm(userName){
+
+        if(!/^XRT\d{4}/.test(userName) && userName != "admin"){
+            alert("请输入正确的账号");
+            return false;
+        }
+        return true;
+    }
+
+    function wxLogin() {
+        var userName = $("#userName").val().toUpperCase();
+        var passWord = $("#passWord").val();
+        if(checkForm(userName)){
+            $.ajax({
+                url:"/wx/login",
+                type:"get",
+                dataType:"json",
+                cache:false,
+                data:{
+                    username:userName,
+                    password:passWord
+                },
+                success:function(data){
+                    if(data.status == 'success'){
+                        var obj = data.data;
+                        if($("#remember").prop("checked")){
+                            $.cookie("remember","true",{expires:7});
+                            $.cookie("userName", userName,{expires:7});
+                            $.cookie("passWord", passWord,{expires:7});
+                        }else{
+                            $.cookie("remember","false",{expires:-1});
+                            $.cookie("userName","",{expires:-1});
+                            $.cookie("passWord","",{expires:-1});
+                        }
+                        if(obj.usertype == "2"){
+                            location.href = "/wx/toEmpList";
+                        }else{
+                            location.href = "/wx/toAdminList";
+                        }
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+
+
+</script>
+</body>
+</html>

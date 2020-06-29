@@ -1,0 +1,14 @@
+.btn-left{
+    float: left;
+    margin-left: 15px;
+}
+.btn-right{
+    float: right;
+    margin-right: 15px;
+}
+.clear{
+    clear: both;
+}
+.form-group .form-label {
+    padding-top: 0;
+}

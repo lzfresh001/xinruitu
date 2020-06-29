@@ -1,0 +1,106 @@
+		<aside th:fragment="admin-left" class="main-sidebar">
+			<!-- sidebar: style can be found in sidebar.less 菜单-->
+			<section class="sidebar">
+				<div class="user-panel">
+					<div class="pull-left image">
+						<img src="/static/images/logo.png" class="img-circle"
+							alt="User Image">
+					</div>
+					<div class="pull-left info">
+						<p th:text="${userName}" style="margin: 11px 15px 10px;">Alexander Pierce</p>
+					</div>
+				</div>
+
+						<ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">主导航</li>
+                        <li class="treeview" >
+                            <a  href="#">
+                                <i class="fa fa-gears"></i>
+                                <span text="">系统管理</span>
+                                <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            </a>
+                        <ul class="treeview-menu">
+                                <li>
+                                    <a target="mainFrame" href="/user/list">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">用户管理</label>
+                                    </a>
+                                </li>
+                            </ul>
+						</li>
+						<li class="treeview" >
+                            <a  href="#">
+                                <i class="fa fa-newspaper-o"></i>
+                                <span text="">业务管理</span>
+                                <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="111">项目管理</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="111">台账管理</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="111">生产管理</label>
+                                    </a>
+                                </li>
+                            </ul>
+						</li>
+						<li class="treeview" >
+                            <a  href="#">
+                                <i class="fa fa-cab"></i>
+                                <span text="">报表管理</span>
+                                <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">拼接版钻孔计量</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">杆件钻孔计量</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">磁力钻钻孔计量</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">刨边计量</label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="mainFrame" href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        <label text="用户管理">焰切计量</label>
+                                    </a>
+                                </li>
+                            </ul>
+					</li>
+				</ul>
+			</section>
+			<!-- /.sidebar -->
+		</aside>

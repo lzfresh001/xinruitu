@@ -1,0 +1,92 @@
+package com.yx.xinruitu.dao;
+
+import com.yx.xinruitu.entity.Project;
+import com.yx.xinruitu.util.ParameterMap;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * ClassName: ProjectDAO
+ * Package: com.yx.xinruitu.dao
+ * Decription:
+ * <p>
+ * Date: 2019/12/9 15:41
+ * Author: lzfresh
+ */
+@Repository
+@Mapper
+public interface ProjectDAO {
+
+    /**
+     * 按要求获取项目列表信息
+     * @param pm
+     * @return
+     */
+    List<ParameterMap> getProListByPage(ParameterMap pm);
+
+    /**
+     * 按要求获取项目列表信息条数
+     * @param pm
+     * @return
+     */
+    Integer getProListCount(ParameterMap pm);
+
+    /**
+     * 根据项目名称查询项目信息
+     * @param prj_name
+     * @return
+     */
+    Project getProjectByPrjName(String prj_name);
+
+    /**
+     * 添加项目信息
+     * @param pm
+     */
+    void saveProject(ParameterMap pm);
+
+    /**
+     * 根据项目ID查询项目信息
+     * @param prj_id
+     * @return
+     */
+    ParameterMap findProject(String prj_id);
+
+    /**
+     * 编辑项目信息
+     * @param pm
+     */
+    void editProject(ParameterMap pm);
+
+    /**
+     * 获取所有项目的名称和ID
+     * @return
+     */
+    List<ParameterMap> getPrjName();
+
+    /**
+     * 获取所有项目名称
+     * @return
+     */
+    List<Project> showPrjNameList();
+
+    /**
+     * 获取所有项目二级名称
+     * @return
+     */
+    List<Project> showPrj2ndNameList();
+
+    /**
+     * 根据项目名称和二级名称获取项目ID
+     * @param pm
+     * @return
+     */
+    Long getPrjIdValue(ParameterMap pm);
+
+    /**
+     * 获取项目最大id
+     * @return
+     */
+    Integer getMaxId();
+}

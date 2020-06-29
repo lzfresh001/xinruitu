@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>广州市人民政府门户网站</title>
+	<link rel="stylesheet" type="text/css" href="/gzgov/xhtml/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/gzgov/xhtml/css/content2018.css" />
+<style type="text/css">
+/*error*/
+.container{}
+.error{padding:20px; font-size:15px; line-height:30px;}
+.Error403_item{ padding:10px 0;}
+.Error403_item h4{ border-bottom:#e3e3e3 1px solid; margin:0; padding:0 0 10px 10px; font-size:16px; margin-bottom:10px; color:#bc1010;}
+.Error403_item ul li{background:url(../images/2016_icon_dot_grey.gif) no-repeat left center; padding:0 0 0 18px; line-height:32px;}
+.Error403_item ul li a{ text-decoration:underline;}
+.Error403_item ul li a:hover{text-decoration:none;}
+.Error404, .Error503{ text-align:center; padding:50px 0; line-height:40px; font-size:18px;}
+.Error404 a:hover{text-decoration:underline;}
+</style>
+    <!--[if lt IE 9]>
+    <script src="../xhtml/js/html5shiv.js"></script>
+    <script src="../xhtml/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="../xhtml/js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<!--header Start--> 
+<div class="head">
+  <div class="container">
+    <ul class="menu">
+      <li class="dl"></li>
+      <li class="lang">
+        <h4><a href="#">语言<i></i></a></h4>
+        <div class="drop drop_lang">
+          <ul>
+            <li><a class="on" style="cursor: pointer;" onclick="go_chinese(80)">简体</a></li>
+            <li><a style="cursor: pointer;" onclick="go_chinese(82)">繁体</a></li>
+            <li><a href="http://english.gz.gov.cn/" target="_blank">English</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="mobile">
+        <h4><a href="#">手机端<i></i></a></h4>
+        <div class="drop ewm">
+          <ul>
+            <li><img src="/gzgov/xhtml/images/public/ewm_mobile.jpg"><span>关注 · 手机版</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="wza"><a href="http://voice.gz.gov.cn/.m/turbowas/a.jsp?entryUri=/&entryDomain=http://www.gz.gov.cn
+" target="_blank">无障碍</a></li>
+      <li class="wx">
+        <h4><a href="#">微信<i></i></a></h4>
+        <div class="drop ewm">
+          <ul>
+            <li><img src="/gzgov/xhtml/images/public/ewm_wx.jpg"><span>关注 · 广州政府网</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="wb">
+        <h4><a href="#">微博<i></i></a></h4>
+        <div class="drop ewm ewm_w2">
+          <ul>
+            <li><A href="http://weibo.com/2605594314" target="_blank"><img src="/gzgov/xhtml/images/zggzfb.jpg"><span>中国广州发布</span></A>
+            </li>
+            <li><a href="http://weibo.com/2532700305" target="_blank"><img src="/gzgov/xhtml/images/gzzfxwb.jpg"><span>广州市政府<br>新闻办</span></a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="ftb"><a href="http://mail.gz.gov.cn/" target="_parent">政务邮箱</a></li>
+      <li class="ipv6"><img src="/gzgov/xhtml/images/public/wzipv6.png"></li>
+    </ul>
+  </div>
+</div>
+<div class="header container">
+  <div class="logo"><a href="http://www.gz.gov.cn/"><img src="/gzgov/xhtml/images/public/logo.png"></a></div>
+  <div class="searchbox">
+    <div class="header_ss_open"><span>搜索</span><i class="icon iconfont icon-search-outline"></i></div>
+    <div class="header_ss">
+      <div class="close"><i class="icon iconfont icon-close-outline"></i></div>
+      <div class="ss">
+        <input type="text" class="stxt" placeholder="请输入关键字"  name="qt" id="qt">
+         <input class="sbtn" value="搜一下" type="button" onClick="searchindexs()">
+          <i><input class="ss_btn2" value="" type="button" onClick="searchindexs1()"></i>
+      </div>
+    </div>
+  </div>
+  <div class="menuopen"><i class="icon iconfont icon-menu-outline"></i></div>
+  <ul class="mainnav" id="mainnav">
+    <li class="nav0"><a href="http://www.gz.gov.cn/" target="_blank">首页</a></li>
+    <li>
+      <a href="http://www.gz.gov.cn/gzgov/zwgk/zwgk.shtml"  target="_blank">政务公开</a>
+    </li>
+    <li>
+      <a href="http://www.gz.gov.cn/gzgov/zwfw/zwfw.shtml"  target="_blank">政务服务</a>
+    </li>
+    <li>
+      <a href="http://www.gz.gov.cn/gzgov/hdjl/hdjl.shtml"  target="_blank">互动交流</a>
+    </li>
+    <li>
+      <a href="http://www.gz.gov.cn/gzgov/s2767/tzgz_home.shtml"  target="_blank">营商广州</a>
+    </li>
+    <li>
+      <a href="http://www.gz.gov.cn/gzgov/mlgz/mlgz.shtml"  target="_blank">魅力广州</a>
+    </li>
+   
+  </ul>
+</div>
+<div class="contop">
+	<div class="mnlogo"><img src="/gzgov/xhtml/images/public/logo.png"></div>
+    <div class="allmenu"><i class="icon iconfont icon-menu-outline"></i></div>
+</div> 
+<!--header End-->
+<div class="container_bg">
+  <div class="container clearfix" style="background:#fff;">
+	<div class="info-container">
+        <div class="error">
+ 
+
+                <div class="error_cont Error404"><span style="FONT-SIZE: 30px"><font color="#397fbb">抱歉</font>，您所访问的页面不存在...</span><br>
+请点击跳转到<a style="COLOR: #bc1010" href="http://www.gz.gov.cn">中国广州政府门户网站首页</a> </div>
+
+        </div>
+    </div>
+</div></div>
+<!-- footer Start --> 
+<div class="footer clearfix">
+  <div class="container">
+    <div class="footer_txt">
+      <div class="footer_nav">
+        <script type="text/javascript" src="/gzgov/xhtml/js/key_ctrl.js"></script>
+        	<span class="hide_mobile"><a href="#" onclick="javascript:send_error()">内容纠错</a> |</span>
+            <a href="http://www.gz.gov.cn/gzgov/s2334/common_tt.shtml"  target="_self" title='使用帮助' >使用帮助</a>|
+                <a href="http://www.gz.gov.cn/gzgov/s2336/common_tt.shtml"  target="_self" title='关于我们' >关于我们</a>|
+                <a href="http://www.gz.gov.cn/gzgov/s2878/common_tt.shtml"  target="_self" title='隐私声明' >隐私声明</a>|
+                <a href="http://www.gz.gov.cn/gzgov/s2335/sitemap.shtml"  target="_self" title='网站地图' >网站地图</a>|
+                <a href="http://www.gz.gov.cn/gzgov/s2337/wzjy.shtml"  target="_self" title='网站建议' >网站建议</a>
+      </div>
+      <div class="footer_copyright">
+         
+
+            <span>广州市人民政府 版权所有　</span><span>主办单位：广州市人民政府办公厅</span><br>
+<span>网站标识码：4401000004&nbsp;&nbsp;&nbsp;ICP备案号：<a target="_blank" href="http://beian.miit.gov.cn/">粤B2-20040244号-1</a> </span><span><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602000929"><img style="BORDER-TOP-COLOR: ; BORDER-LEFT-COLOR: ; BORDER-BOTTOM-COLOR: ; FILTER: none; BORDER-RIGHT-COLOR: " src="/gzgov/2016bottom/201611/b282029c19684c2282a66d1423600019/images/27f6f788a35c4661a43aa7ce1ae91e7f.png"> 粤公网安备 44010602000929号</a></span>
+
+      </div>
+    </div>
+    <div class="footer_wzbs"><span id="_span_jiucuo"><script id="_jiucuo_" sitecode='4401000004' src='http://pucha.kaipuyun.cn/exposure/jiucuo.js'></script></span><span id="_ideConac"><a href="http://bszs.conac.cn/sitename?method=show&id=17C0E2483D0F4652E053022819ACBE93" target="_blank"><img id="imgConac" src="/gzgov/xhtml/images/public/red.png"></a></span></div>
+  </div>
+</div>
+<!-- 右侧 Start --> 
+<div class="easybtn">
+  <div class="easybtn_main">
+    <div class="easybtn_in">
+    <ul class="ul01">
+        <li id="rwyw" class="item button-rotate">
+          <div class="btn"><a class="rotate" href="http://gz12345.gz.gov.cn/" target="_blank"><i></i><span>广州12345</span></a></div>
+        </li>
+        <li id="rwyc" class="item button-rotate">
+          <div class="btn"><a class="rotate" href="/gzgov/bmcxun/common_listb.shtml" target="_blank"><i></i>我要查</a></div>
+        </li>
+        <li id="rwyb" class="item button-rotate">
+          <div class="btn"><a class="rotate" href="http://www.gdzwfw.gov.cn/portal/index?region=440100" target="_blank"><i></i>我要办</a></div>
+        </li>
+        <li id="rzwt" class="item button-rotate">
+          <div class="btn"><a id="zwt" class="rotate"><i></i>政务通</a></div>
+          <div class="item-hover"><b class="qrcode-xcx"></b><span>扫描下载<br>“广州政务通”APP</span></div>
+        </li>
+        <li id="znwd" class="item button-rotate">
+          <div class="btn"><a class="rotate" href="http://www.gz.gov.cn/dhc/qa/" target="_blank"><i></i>智能问答</a></div>
+        </li>
+        <li id="gxdy" class="item button-rotate">
+          <div class="btn"><a id="gxdy" class="rotate" href="https://www.gz.gov.cn/sofpro/gzyyqt/subscribe/index.jsp"><i></i>个性订阅</a></div>
+          <div class="item-hover"><b class="qrcode-gxdy"></b><span>请扫一扫</span></div>
+        </li>
+        <li id="ryy" class="item button-rotate">
+          <div class="btn"><a class="rotate" href="/gzgov/yyong/yy.shtml" target="_blank"><i></i>应用</a></div>
+        </li>
+    </ul>
+    </div>
+  </div>
+</div>
+<!-- 右侧 end --> 
+<script type="text/javascript" src="/gzgov/xhtml/js/common2018.js"></script> 
+<!-- footer End -->
+</body>
+</html>

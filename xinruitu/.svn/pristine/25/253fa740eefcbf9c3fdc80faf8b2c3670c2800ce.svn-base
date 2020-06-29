@@ -1,0 +1,23 @@
+package com.yx.xinruitu.dao;
+
+import com.yx.xinruitu.entity.User;
+import com.yx.xinruitu.util.ParameterMap;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@Mapper
+public interface UserDao {
+	User getUserInfo(ParameterMap pm);
+	List<ParameterMap> getUserList();
+	List<ParameterMap> getUserListByPage(ParameterMap pm);
+	Integer getUserListCount(ParameterMap pm);
+	void saveLoginTime(String userId);
+	void saveUser(ParameterMap pm);
+	void editUser(ParameterMap pm);
+	void delUser(String userId);
+	ParameterMap findUser(String userId);
+	ParameterMap findUserByUsername(String username);
+}

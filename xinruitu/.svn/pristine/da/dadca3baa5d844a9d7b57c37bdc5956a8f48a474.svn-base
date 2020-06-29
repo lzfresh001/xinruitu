@@ -1,0 +1,13 @@
+package com.yx.xinruitu.controller;
+
+import com.yx.xinruitu.controller.base.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 项目管理Controller
+ */
+@Controller
+@RequestMapping("/project")
+public class ProjectController extends BaseController {
+}

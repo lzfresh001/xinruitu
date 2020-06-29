@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+
+<section class="content-header">
+    <h1>
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>业务管理</a></li>
+        <li class="active">项目管理</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">项目管理</h3>
+            <br><br>
+           <button class="btn btn-success btn-sm" id="addData"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加项目</button>
+           <div class="btn-right">
+                <label class="form-inline">项目名称：<input type="text" class="form-control" th:value="${PrjName}" id="prj_name_search" autocomplete="off" /></label>
+                <button class="btn btn-primary btn-sm" id="btn_search">查询</button>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="box-body">
+            <table id="dataList" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目编号</th>
+                    <th>项目名称</th>
+                    <th>二级名称</th>
+                    <th>添加人</th>
+                    <th>添加时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="one,stat:${ProList.data.list}">
+                    <td th:text="${stat.count}">序号</td>
+                    <td th:text="${one.prj_code}">项目编号</td>
+                    <td th:text="${one.prj_name}">项目名称</td>
+                    <td th:text="${one.prj_name_2nd}">二级名称</td>
+                    <td th:text="${one.add_user}">添加人</td>
+                    <td th:text="${one.add_time}">添加时间</td>
+                    <td >
+						<span>
+							<span data-toggle="tooltip" data-placement="left" title="修改" class="btn btn-xs btn-info" th:onclick="'editProject('+${one.prj_id}+')'"><i class="fa fa-edit"></i> 修改</span>
+						</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30" colspan="7">
+                        <div class="footer_style1">
+                            <span>共有<strong th:text="${ProList.data.recordsTotal}"></strong>条记录，当前第<strong><th:block th:text="${ProList.data.draw}"></th:block>/<th:block th:text="${ProList.data.totalpage}"></th:block></strong>页</span>
+                            <ul class="ul_style3">
+                                <li th:if="${ProList.data.draw eq 1}">
+                                    <span>首页</span>
+                                    <span>上一页</span>
+                                </li>
+                                <li th:if="${ProList.data.draw ne 1}">
+                                    <a th:href="@{/project/list(pageNo=1)}">首页</a>
+                                    <a th:href="@{/project/list(pageNo=${ProList.data.draw - 1})}">上一页</a>
+                                </li>
+                                <li th:if="${ProList.data.draw eq ProList.data.totalpage}">
+                                    <span>下一页</span>
+                                    <span>尾页</span>
+                                </li>
+                                <li th:if="${ProList.data.draw ne ProList.data.totalpage}">
+                                    <a th:href="@{/project/list(pageNo=${ProList.data.draw + 1})}">下一页</a>
+                                    <a th:href="@{/project/list(pageNo=${ProList.data.totalpage})}">尾页</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section>
+
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="prjModelHead">添加项目</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  role="form">
+                    <input type="hidden" name="url" value=""/>
+                    <input type="hidden" name="prj_id" value=""/>
+                    <div class="form-group">
+                        <label for="prj_code" class="col-sm-2 control-label">项目编号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="prj_code" value="" id="prj_code" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prj_name" class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="prj_name" value="" id="prj_name" placeholder="请输入项目名称">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prj_name_2nd" class="col-sm-2 control-label">二级名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="prj_name_2nd" value="" id="prj_name_2nd" placeholder="请输入二级名称">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-success"  id="imgSubmit" >确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/adminlte.min.js"></script>
+<script src="/static/js/path.js"></script>
+<script src="/static/js/project.js"></script>
+</body>
+</html>

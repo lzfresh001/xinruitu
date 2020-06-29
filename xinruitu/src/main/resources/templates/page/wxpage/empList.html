@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta charset="utf-8">
+		<title>新瑞途-员工日志</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/static/bower_components/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link href="/static/css/wxList.css" rel="stylesheet" />
+		<link href="/static/css/wxListmin.css" rel="stylesheet" />
+		<style>
+
+
+
+            .footer_style1 {
+				padding: 0 0 0 10px;
+				font-size: 13px;
+			}
+			
+			.footer_style1 span {
+				float: left;
+			}
+			
+			.ul_style3 {
+				list-style: none;
+				line-height: 20px;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				float: right;
+				font-size: 13px;
+			}
+			
+			.ul_style3 a {
+				color: #333;
+				text-decoration: none;
+			}
+			
+			.ul_style3 a:HOVER {
+				color: #15a4b5;
+			}
+			
+			.ul_style3 li {
+				float: left;
+				padding: 0 5px 0 5px;
+			}
+
+            input[type=date]::-webkit-inner-spin-button{visibility: hidden;}
+
+            #searchInput{
+                float: left;
+            }
+            .searchBtn{
+                margin-left: 3px;
+                width: 70px;
+                height: 40px;
+                font-size: 16px;
+                font-family: 'Helvetica Neue';
+                background-color: #20c997;
+                color: #F9F9F9;
+                float: right;
+            }
+
+            #addBtn{
+                float: right;
+            }
+            #seaBtn{
+                float: right;
+            }
+
+            input.es-input { padding-right: 20px !important; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat; }
+            input.es-input.open {
+                -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0;
+                -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+            .es-list { position: absolute; padding: 0; margin: 0; border: 1px solid #d1d1d1; display: none; z-index: 1000; background: #fff; max-height: 160px; overflow-y: auto;
+                -moz-box-shadow: 0 2px 3px #ccc; -webkit-box-shadow: 0 2px 3px #ccc; box-shadow: 0 2px 3px #ccc; }
+            .es-list li { display: block; padding: 5px 10px; margin: 0; }
+            .es-list li.selected { background: #f3f3f3; }
+            .es-list li[disabled] { opacity: .5; }
+
+
+
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<ul class="mui-table-view" style="background-color:#2d9cb5">
+				<li class="mui-table-view-cell">
+                    <!--<button class="btn btn-info" id="seaBtn" onclick="goAddPage();"><i class="fa fa-plus"></i></button>-->
+					<div class="mui-pull-left userinfoinimg">
+						<img src="/static/images/empTou.jpg">
+					</div>
+					<div>
+						<p style="color:#F9F9F9">姓&nbsp;&nbsp;&nbsp;&nbsp;名：<span th:text="${WxEmp.name}"></span></p>
+						<p style="color:#F9F9F9">电&nbsp;&nbsp;&nbsp;&nbsp;话：<span th:text="${WxEmp.phone}"></span></p>
+						<p style="color:#F9F9F9">账&nbsp;&nbsp;&nbsp;&nbsp;号：<span th:text="${WxEmp.username}"></span></p>
+					</div>
+				</li>
+            </ul>
+		</div>
+
+        <div class="mui-active">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <button class="btn btn-info" onclick="goAddPage();"><i class="fa fa-plus"></i> 添加</button>
+                    &nbsp;
+                    <button class="btn btn-primary"  onclick="goReAddPage();"><i class="fa fa-plus"></i> 继续添加</button>
+                    &nbsp;
+                    <button class="btn btn-warning"  onclick="goSearchPage();"><i class="fa fa-search"></i> 查询</button>
+                    &nbsp;
+
+                </li>
+            </ul>
+        </div>
+
+
+
+        <!--<div class="mui-active">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+
+
+                    <div>
+                        <p class='mui-ellipsis' style="width: 70%;height: 40px">
+                            <select id="prj_name_search" name="prj_name_search" class="form-control" placeholder="请输入或选择项目名称">
+                                <option th:each="carpj,userStat:${WxPrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                            </select>
+                        </p>
+                        <p class='mui-ellipsis' style="width: 70%;height: 40px">
+                            <select id="prj_name_2nd_search" name="prj_name_2nd_search" class="form-control" placeholder="请输入或选择二级名称">
+                                <option th:each="carpj2,userStat:${WxPrj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                            </select>
+                        </p>
+                        <p class='mui-ellipsis' style="width: 70%;height: 40px">
+                            <select id="process_type_search" name="process_type_search" class="form-control" placeholder="请选择工序">
+                                &lt;!&ndash;<option value="">请选择</option>&ndash;&gt;
+                                <option>拼接板钻孔</option>
+                                <option>杆件钻孔</option>
+                                <option>磁力钻钻孔</option>
+                                <option>刨边</option>
+                                <option>焰切</option>
+                                <option>其他一</option>
+                                <option>其他二</option>
+                                <option>其他三</option>
+                                <option>其他四</option>
+                                <option>其他五</option>
+                            </select>
+                        </p>
+                        <p class='mui-ellipsis' style="width: 70%;height: 40px">
+                            <select id="status_search" name="status_search" class="form-control" placeholder="请选择状态">
+                                &lt;!&ndash;<option value="">请选择</option>&ndash;&gt;
+                                <option>待审核</option>
+                                <option>已审核</option>
+                            </select>
+                        </p>
+
+                        <p id="searchInput" class='mui-ellipsis' style="width: 70%;height: 40px">
+                            <input type="date" th:value="${SearchData}"  id="searchDate"/>
+                        </p>
+                       &lt;!&ndash; <button class="searchBtn" onclick="searchMon();">查当月</button>&ndash;&gt;
+                        <button class="searchBtn" onclick="searchDay();">查询</button>
+                    </div>
+                </li>
+            </ul>
+        </div>-->
+		<div class="mui-active">
+            <ul class="mui-table-view" th:each="one,stat:${EmpLogList.data.list}">
+                <li class="mui-table-view-cell">
+
+                    <div class="mui-pull-right peplckbtn">
+                        <a>
+                            <span th:if="${one.status eq 0}" th:onclick = "|javascript : editLog( '${ one.id }' )|" style="font-weight: bold;">编辑</span>
+                            <span th:if="${one.status eq 1}" th:onclick = "|javascript : checkLog( '${ one.id }' )|" style="font-weight: bold;">查看</span>
+                        </a>
+                    </div>
+                    <div class="peplinfo">
+                        工序：<span th:text="${one.process_type}"></span>
+                        <p class='mui-ellipsis'>项目名称：<span th:text="${one.prj_name}"></span></p>
+                        <p class='mui-ellipsis'>二级名称：<span th:text="${one.prj_name_2nd}"></span></p>
+                        <p class='mui-ellipsis'>图号：<span th:text="${one.drawing_no}"></span></p>
+                        <p class='mui-ellipsis'>件号：<span th:text="${one.part_no}"></span></p>
+                        <p class='mui-ellipsis'>数量：<span th:text="${one.count}"></span> &nbsp;&nbsp; 小计：<span th:text="${one.total}"></span></p>
+                        <!--<p class='mui-ellipsis'>日期：
+                            <span th:if="${one.status eq 0}" th:text="${one.add_time}"></span>
+                            <span th:if="${one.status eq 1}" th:text="${one.update_time}"></span>
+                            <span th:if="${one.status eq 2}" th:text="${one.accept_time}"></span>
+                            <span th:if="${one.status eq 3}" th:text="${one.update_time}"></span>
+                        </p>-->
+                        <!--<p class='mui-ellipsis'>状态：
+                            <span th:if="${one.status eq 0}">新增</span>
+                            <span th:if="${one.status eq 1}" style="color: #0b93d5">已提交</span>
+                            <span th:if="${one.status eq 2}" style="color: #00a65a">已审核</span>
+                            <span th:if="${one.status eq 3}" style="color: #ff2631">已回退</span>
+                        </p>-->
+                        <p class='mui-ellipsis' th:if="${one.status eq 1}">审核人：
+                            <span th:text="${one.accept_user}">--</span>
+                        </p>
+                    </div>
+
+                </li>
+            </ul>
+		</div>
+		<div class="footer_style1">
+			<span>共有<strong th:text="${EmpLogList.data.recordsTotal}"></strong>条记录，当前第<strong><th:block th:text="${EmpLogList.data.draw}"></th:block>/<th:block th:text="${EmpLogList.data.totalpage}"></th:block></strong>页</span>
+			<ul class="ul_style3">
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw eq EmpLogList.data.totalpage or EmpLogList.data.totalpage eq 0}" >
+                        <a style="background-color:#CCCCCC ; color:#F9F9F9 ;">尾页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw eq EmpLogList.data.totalpage or EmpLogList.data.totalpage eq 0}">
+                        <a style="background-color:#CCCCCC ; color:#F9F9F9 ;">下一页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw ne EmpLogList.data.totalpage and EmpLogList.data.totalpage ne 0}">
+                        <a style="background-color:#2d9cb5 ; color:#F9F9F9 ;" th:href="@{/wx/toEmpList(pageNo=${EmpLogList.data.totalpage},prj_name=${session.emSearchPrjName},prj_name_2nd=${session.emSearchPrjName2nd},process_type=${session.emSearchProcessType},status=${session.emSearchStatus},add_time=${session.emSearchDate})}">尾页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw ne EmpLogList.data.totalpage and EmpLogList.data.totalpage ne 0}">
+                        <a style="background-color:#2d9cb5 ; color:#F9F9F9 ;" th:href="@{/wx/toEmpList(pageNo=${EmpLogList.data.draw + 1},prj_name=${session.emSearchPrjName},prj_name_2nd=${session.emSearchPrjName2nd},process_type=${session.emSearchProcessType},status=${session.emSearchStatus},add_time=${session.emSearchDate})}">下一页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw eq 1}">
+                        <a style="background-color:#CCCCCC ; color:#F9F9F9 ;">上一页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw eq 1}">
+                        <a style="background-color:#CCCCCC ; color:#F9F9F9 ;">首页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw ne 1}">
+                        <a style="background-color:#2d9cb5 ; color:#F9F9F9 ;" th:href="@{/wx/toEmpList(pageNo=${EmpLogList.data.draw - 1},prj_name=${session.emSearchPrjName},prj_name_2nd=${session.emSearchPrjName2nd},process_type=${session.emSearchProcessType},status=${session.emSearchStatus},add_time=${session.emSearchDate})}">上一页</a>
+                    </div>
+
+                    <div class="mui-pull-right peplckbtn" th:if="${EmpLogList.data.draw ne 1}">
+                        <a style="background-color:#2d9cb5 ; color:#F9F9F9 ;" th:href="@{/wx/toEmpList(pageNo=1,prj_name=${session.emSearchPrjName},prj_name_2nd=${session.emSearchPrjName2nd},process_type=${session.emSearchProcessType},status=${session.emSearchStatus},add_time=${session.emSearchDate})}">首页</a>
+                    </div>
+			</ul>
+		</div>
+
+        <div class="modal fade" id="wxAccountLogModal" tabindex="-1" role="dialog"
+             style="overflow-y: scroll;-webkit-overflow-scrolling: touch"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center" id="accLogModelHead">添加日志</h4>
+                    </div>
+
+                    <div id="form1" class="modal-body">
+                        <form class="form-horizontal"  role="form">
+                            <input type="hidden" id="url" name="url" />
+                            <input type="hidden" id="id" name="id" />
+                            <div class="form-group">
+                                <label for="prj_name" class="col-sm-2 control-label">项目名称</label>
+                                <div class="col-sm-10">
+                                    <select id="prj_name" name="prj_name" class="form-control" placeholder="请输入或选择项目名称">
+                                        <option th:each="carpj,userStat:${WxPrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prj_name_2nd" class="col-sm-2 control-label">二级名称</label>
+                                <div class="col-sm-10">
+                                    <select id="prj_name_2nd" name="prj_name_2nd" class="form-control" placeholder="请输入或选择二级名称">
+                                        <option th:each="carpj2,userStat:${WxPrj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="drawing_no" class="col-sm-2 control-label">图号</label>
+                                <div class="col-sm-10">
+                                    <select id="drawing_no" name="drawing_no" onblur="dnChange();" class="form-control" placeholder="请输入或选择图号">
+                                        <option th:each="car,userStat:${WxDrawNoList}" th:value="${car.drawing_no}" th:text="${car.drawing_no}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group">
+                                <label for="ac_name" class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-10">
+                                    <select id="ac_name" name="ac_name" onblur="anChange();" class="form-control" placeholder="请输入或选择名称">
+                                        <option th:each="cart,userStat:${WxAcNameList}" th:value="${cart.ac_name}" th:text="${cart.ac_name}"></option>
+                                    </select>
+                                </div>
+                            </div>-->
+
+                            <div class="form-group">
+                                <label for="part_no" class="col-sm-2 control-label">件号</label>
+                                <div class="col-sm-10">
+                                    <select id="part_no" name="part_no" onblur="pnoChange();" class="form-control" placeholder="请输入或选择件号">
+                                        <option th:each="cartt,userStat:${WxPartNoList}" th:value="${cartt.part_no}" th:text="${cartt.part_no}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="process_type" class="col-sm-2 control-label">工序</label>
+                                <div class="col-sm-10">
+                                    <select id="process_type" name="process_type" onblur="ptChange();" class="form-control" placeholder="请选择工序">
+                                        <!--<option value="">请选择</option>-->
+                                        <option>拼接板钻孔</option>
+                                        <option>杆件钻孔</option>
+                                        <option>磁力钻钻孔</option>
+                                        <option>刨边</option>
+                                        <option>焰切</option>
+                                        <option>其他一</option>
+                                        <option>其他二</option>
+                                        <option>其他三</option>
+                                        <option>其他四</option>
+                                        <option>其他五</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="count" class="col-sm-2 control-label">数量</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="count" value="" id="count" placeholder="请输入数量">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="thickness" class="col-sm-2 control-label">厚度</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="thickness" value="" id="thickness" placeholder="请输入厚度">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="height" class="col-sm-2 control-label">宽度</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="height" value="" id="height" placeholder="请输入宽度">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="width" class="col-sm-2 control-label">长度</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="width" value="" id="width" placeholder="请输入宽度">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="single_weight_div" hidden>
+                                <label for="single_weight" class="col-sm-2 control-label">单件重量</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="single_weight" value="" id="single_weight" placeholder="请输入单件重量">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="single_hole_div" hidden>
+                                <label for="single_hole" class="col-sm-2 control-label" id="holeText">单件孔数</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="single_hole" value="" id="single_hole" placeholder="请输入单件孔数">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="single_length_div" hidden>
+                                <label for="single_length" class="col-sm-2 control-label">单件长度</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="single_length" value="" id="single_length" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="total_div">
+                                <label for="single_length" class="col-sm-2 control-label">小计</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="total" value="" id="total" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="coefficient" class="col-sm-2 control-label">系数</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="coefficient" value="" id="coefficient" placeholder="请输入系数">
+                                </div>
+                            </div>
+
+                           <!-- <div class="form-group" id="replyDiv">
+                                <label for="coefficient" class="col-sm-2 control-label">批复</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="reply" value="" id="reply" rows="3" readonly></textarea>
+                                </div>
+                            </div>-->
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-info" onclick="saveLog()"  id="imgSubmit">保存</button>
+                       <!-- <button class="btn btn-success" id="subBtn" onclick="subLog();"  hidden>提交</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--search-start-->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center" id="searchModelHead">添加查询条件</h4>
+                    </div>
+
+                    <div id="form2" class="modal-body">
+                        <form class="form-horizontal"  role="form">
+                            <div class="form-group">
+                                <label for="prj_name" class="col-sm-2 control-label">项目名称</label>
+                                <div class="col-sm-10">
+                                    <select id="prj_name_search" name="prj_name_search" th:value="${SearchPrjName}" class="form-control" placeholder="请输入或选择项目名称">
+                                        <option th:each="carpj,userStat:${WxPrjNameList}" th:value="${carpj.prj_name}" th:text="${carpj.prj_name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prj_name_2nd" class="col-sm-2 control-label">二级名称</label>
+                                <div class="col-sm-10">
+                                    <select id="prj_name_2nd_search" name="prj_name_2nd_search" th:value="${SearchPrjName2nd}" class="form-control" placeholder="请输入或选择二级名称">
+                                        <option th:each="carpj2,userStat:${WxPrj2ndNameList}" th:value="${carpj2.prj_name_2nd}" th:text="${carpj2.prj_name_2nd}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label for="process_type" class="col-sm-2 control-label">工序</label>
+                            <div class="col-sm-10">
+                                <select id="process_type_search" name="process_type_search" th:value="${SearchProcessType}" class="form-control" placeholder="请选择工序">
+                                    <!--<option value="">请选择</option>-->
+                                    <option>拼接板钻孔</option>
+                                    <option>杆件钻孔</option>
+                                    <option>磁力钻钻孔</option>
+                                    <option>刨边</option>
+                                    <option>焰切</option>
+                                    <option>其他一</option>
+                                    <option>其他二</option>
+                                    <option>其他三</option>
+                                    <option>其他四</option>
+                                    <option>其他五</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="process_type" class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-10">
+                                <select id="status_search" name="status_search" th:value="${SearchStatus}" class="form-control" placeholder="请选择状态">
+                                    <!--<option value="">请选择</option>-->
+                                    <option>待审核</option>
+                                    <option>已审核</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="height" class="col-sm-2 control-label">日期</label>
+                            <div class="col-sm-10">
+                                <input type="date" th:value="${SearchData}"  id="searchDate" placeholder="请选择时间"/>
+                            </div>
+                        </div>
+
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-success" id="searchBtn" onclick="searchLog();">提交查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--search-end-->
+
+	</body>
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/static/dist/js/adminlte.min.js"></script>
+    <script src="/static/js/jquery-editable-select.js"></script>
+<script>
+
+    $('#prj_name').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_2nd').editableSelect({
+        effects: 'slide'
+    });
+    $('#drawing_no').editableSelect({
+        effects: 'slide'
+    });
+    /*$('#ac_name').editableSelect({
+        effects: 'slide'
+    })*/
+    $('#part_no').editableSelect({
+        effects: 'slide'
+    });
+    $('#process_type').editableSelect({
+        effects: 'slide'
+    });
+
+    $('#prj_name_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#prj_name_2nd_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#process_type_search').editableSelect({
+        effects: 'slide'
+    });
+    $('#status_search').editableSelect({
+        effects: 'slide'
+    });
+
+    // 点击查询按钮触发
+    function searchDay() {
+        var searchDay = $("#searchDate").val();
+        location.href="/wx/toEmpList?add_time=" + searchDay;
+    }
+
+    function searchMon() {
+        var searchMon = $("#searchDate").val();
+        location.href="/wx/toEmpList?add_time=" + searchMon  + "&searchType=M";
+    }
+
+    // 点击提交查询触发
+    function searchLog() {
+        var prj_name_search = $("#prj_name_search").val();
+        var prj_name_2nd_search = $("#prj_name_2nd_search").val();
+        var process_type_search = $("#process_type_search").val();
+        var status_search = $("#status_search").val();
+        var searchDate = $("#searchDate").val();
+        location.href="/wx/toEmpList?prj_name=" + prj_name_search  + "&prj_name_2nd=" + prj_name_2nd_search + "&process_type=" + process_type_search + "&status=" + status_search + "&add_time=" + searchDate;
+        $("#searchModal").modal("hide");
+    }
+
+    // 验证图号、名称、件号所选的值,获取长、宽、厚
+    function getTHWValue(drawing_no,part_no) {
+        $.ajax({
+            type:"GET",
+            url:"/wx/getTHWValue",
+            cache:false,
+            dataType:"json",
+            data:{
+                drawing_no:drawing_no,
+                part_no:part_no
+            },
+            success:function(data){
+                if(data.status == "success"){
+                    var obj = data.data;
+                    if(null != obj){
+                        $("#thickness").val(obj.thickness);
+                        $("#height").val(obj.height);
+                        $("#width").val(obj.width);
+                    } else {
+                        $("#thickness").val("");
+                        $("#height").val("");
+                        $("#width").val("");
+                    }
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    // 选择图号、名称、件号触发
+    function dnChange() {
+        var drawing_no = $("#drawing_no").val();
+        //var ac_name = $("#ac_name").val();
+        var part_no = $("#part_no").val();
+        if(null != drawing_no && drawing_no != "" && null != part_no && part_no != ""){
+            getTHWValue(drawing_no,part_no);
+        }
+    }
+    function anChange() {
+        var drawing_no = $("#drawing_no").val();
+        //var ac_name = $("#ac_name").val();
+        var part_no = $("#part_no").val();
+        if(null != drawing_no && drawing_no != "" && null != part_no && part_no != ""){
+            getTHWValue(drawing_no,part_no);
+        }
+    }
+    function pnoChange() {
+        var drawing_no = $("#drawing_no").val();
+        //var ac_name = $("#ac_name").val();
+        var part_no = $("#part_no").val();
+        if(null != drawing_no && drawing_no != "" && null != part_no && part_no != ""){
+            getTHWValue(drawing_no,part_no);
+        }
+    }
+
+    // 选择工序时触发
+    function ptChange() {
+        var process_type = $("#process_type").val();
+        if(process_type == "刨边"){
+            $("#single_weight_div").show();
+            $("#single_hole_div").hide();
+            $("#single_length_div").hide();
+        }
+        if(process_type == "拼接板钻孔" || process_type == "杆件钻孔" || process_type == "磁力钻钻孔"
+            || process_type == "其他一" || process_type == "其他二" || process_type == "其他三" || process_type == "其他四" || process_type == "其他五"){
+            $("#single_weight_div").hide();
+            $("#single_hole_div").show();
+            $("#single_length_div").hide();
+        }
+        if(process_type == "拼接板钻孔" || process_type == "杆件钻孔" || process_type == "磁力钻钻孔"){
+            $("#holeText").text("单件孔数");
+        }
+        if(process_type == "其他一" || process_type == "其他二" || process_type == "其他三" || process_type == "其他四" || process_type == "其他五"){
+            $("#holeText").text("单件数量");
+        }
+
+        if(process_type == "焰切"){
+            $("#single_weight_div").hide();
+            $("#single_hole_div").hide();
+            $("#single_length_div").show();
+        }
+    }
+
+    //验证数据
+    function checkValue(prj_name_2nd,part_no,process_type,
+                        count,thickness,height,width,single_weight,single_hole,
+                        single_length,coefficient){
+        if(prj_name_2nd == ''){
+            $("input[name='prj_name_2nd']").focus();
+            alert("二级名称不能为空");
+            return false;
+        }
+        if(process_type != '拼接板钻孔' && process_type != '杆件钻孔' && process_type != '磁力钻钻孔' && process_type != '刨边' && process_type != '焰切'){
+            $("#process_type").focus();
+            alert("请选择工序");
+            return false;
+        }
+        if(part_no == ''){
+            $("select[name='part_no']").focus();
+            alert("请选择件号");
+            return false;
+        }
+        if(!/^\d+$/.test(count)){
+            $("input[name='count']").focus();
+            alert("请输入数量(只能是正整数)");
+            return false;
+        }
+        if(!/^\d+$/.test(thickness)){
+            $("input[name='thicknesss']").focus();
+            alert("请输入厚度(只能是正整数)");
+            return false;
+        }
+        if(!/^\d+$/.test(height)){
+            $("input[name='height']").focus();
+            alert("请输入宽度(只能是正整数)");
+            return false;
+        }
+        if(!/^\d+$/.test(width)){
+            $("input[name='width']").focus();
+            alert("请输入长度(只能是正整数)");
+            return false;
+        }
+        if(!/^\d+$/.test(coefficient)){
+            $("input[name='coefficient']").focus();
+            alert("请输入系数(只能是正整数)");
+            return false;
+        }
+        return true;
+    }
+
+    // 点击添加触发
+    function goAddPage() {
+        /*$("#accLogModelHead").text("添加日志");
+        $("#url").val("/wx/addLog");
+        $("input[name='id']").val("");
+        $("#prj_name").val("");
+        $("#prj_name_2nd").val("");
+        $("#drawing_no").val("");
+        $("#ac_name").val("");
+        $("#part_no").val("");
+        $("#process_type").val("");
+        $("input[name='count']").val("");
+        $("input[name='thickness']").val("");
+        $("input[name='height']").val("");
+        $("input[name='width']").val("");
+        $("input[name='single_weight']").val("");
+        $("input[name='single_hole']").val("");
+        $("input[name='single_length']").val("");
+        $("input[name='coefficient']").val("");
+        /!*$("#prj_name").remove("disabled");
+        $("#prj_name_2nd").remove("disabled");
+        $("#drawing_no").remove("disabled");
+        $("#ac_name").remove("disabled");
+        $("#part_no").remove("disabled");
+        $("#process_type").remove("disabled");
+        $("input[name='count']").remove("readonly");
+        $("input[name='thickness']").remove("readonly");
+        $("input[name='height']").remove("readonly");
+        $("input[name='width']").remove("readonly");
+        $("input[name='single_weight']").remove("readonly");
+        $("input[name='single_hole']").remove("readonly");
+        $("input[name='single_length']").remove("readonly");
+        $("input[name='coefficient']").remove("readonly");
+        $("#replyDiv").hide();
+        $("#imgSubmit").show();
+        $("#subBtn").hide();*!/
+        $("#wxAccountLogModal").modal("show");*/
+
+        location.href="/wx/toEmpAddPage";
+    }
+
+    // 点击查询按钮触发
+    function goSearchPage(){
+        // $("#searchModelHead").text("添加查询条件");
+        // $("#searchModal").modal("show");
+        location.href="/wx/toEmpSearchPage";
+    }
+
+    //点击保存按钮触发
+    function saveLog() {
+        
+        //alert(999);
+        var url = $("#url").val();
+        var id = $("input[name='id']").val();
+        var prj_name = $("#prj_name").val();
+        var prj_name_2nd = $("#prj_name_2nd").val();
+        var drawing_no = $("#drawing_no").val();
+        //var ac_name = $("#ac_name").val();
+        var part_no = $("#part_no").val();
+        var process_type = $("#process_type").val();
+        var count = $("input[name='count']").val();
+        var thickness = $("input[name='thickness']").val();
+        var height = $("input[name='height']").val();
+        var width = $("input[name='width']").val();
+        var single_weight = $("input[name='single_weight']").val();
+        var single_hole = $("input[name='single_hole']").val();
+        var single_length;
+        var coefficient = $("input[name='coefficient']").val();
+
+        /*if(process_type == "刨边"){
+            if(!/^-?\d+(\.\d{1,2})?$/.test(single_weight)){
+                //$("input[name='single_weight']").focus();
+                alert("请输入重量(最多包含两位小数)");
+                return false;
+            }
+        }
+        if(process_type == "拼接板钻孔" || process_type == "杆件钻孔" || process_type == "磁力钻钻孔"){
+            if(!/^\d+$/.test(single_hole)){
+                //$("input[name='single_hole']").focus();
+                alert("请输入孔数(只能是正整数)");
+                return false;
+            }
+        }*/
+
+        if(null == prj_name || prj_name == ""){
+            alert("项目名称不能为空");
+            return false;
+        }
+        if(null == count || count == ""){
+            alert("数量不能为空");
+            return false;
+        }
+        if(null == coefficient || coefficient == ""){
+            alert("系数不能为空");
+            return false;
+        }
+
+        if(process_type != "拼接板钻孔" && process_type != "杆件钻孔" && process_type != "磁力钻钻孔" && process_type != "刨边" && process_type != "焰切"
+            && process_type != "其他一" && process_type != "其他二" && process_type != "其他三" && process_type != "其他四" && process_type != "其他五"){
+            alert("请选择正确的工序");
+            return false;
+        }
+
+        if(process_type == "焰切"){
+            single_length = (parseFloat(height) + parseFloat(width)) * 2;
+            $("#single_length").val(single_length);
+        }
+
+        $.ajax({
+            type:"post",
+            url:url,
+            cache:false,
+            dataType:"json",
+            data:{
+                id:id,
+                prj_name:prj_name,
+                prj_name_2nd:prj_name_2nd,
+                drawing_no:drawing_no,
+                part_no:part_no,
+                process_type:process_type,
+                count:count,
+                thickness:thickness,
+                height:height,
+                width:width,
+                single_weight:single_weight,
+                single_hole:single_hole,
+                single_length:single_length,
+                coefficient:coefficient
+            },
+            success:function(data){
+                if(data.status == 'success'){
+                    $("#wxAccountLogModal").modal("hide");
+                    location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    // 点击继续添加触发
+    function goReAddPage() {
+
+        /*$("input[name='id']").val("");
+        $("#url").val("/wx/addLog");
+        $("#prj_name").val("");
+        $("#prj_name_2nd").val("");
+        $("#drawing_no").val("");
+        $("#ac_name").val("");
+        $("#part_no").val("");
+        $("#process_type").val("");
+        $("input[name='count']").val("");
+        $("input[name='thickness']").val("");
+        $("input[name='height']").val("");
+        $("input[name='width']").val("");
+        $("input[name='single_weight']").val("");
+        $("input[name='single_hole']").val("");
+        $("input[name='single_length']").val("");
+        $("input[name='coefficient']").val("");
+
+        $.ajax({
+            type:"GET",
+            url:"/wx/lastLogByUid",
+            data:{},
+            dataType:"json",
+            cache:false,
+            success:function(data){
+                if(data.status == "success"){
+                    var LastObj = data.data;
+                    $("#accLogModelHead").text("添加日志");
+                    $("#prj_name").val(LastObj.prj_name);
+                    $("#prj_name_2nd").val(LastObj.prj_name_2nd);
+                    $("#ac_name").val(LastObj.ac_name);
+                    $("#process_type").val(LastObj.process_type);
+                    $("input[name='coefficient']").val(LastObj.coefficient);
+                    $("#wxAccountLogModal").modal("show");
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });*/
+
+        location.href="/wx/toEmpReAddPage";
+    }
+
+
+    // 点击查看/编辑触发
+    function checkLog(id) {
+        //$("#replyDiv").show();
+        $("#url").val("/wx/editLog");
+        $.ajax({
+            type:"GET",
+            url:"/wx/findLog",
+            data:{id:id},
+            dataType:"json",
+            cache:false,
+            success:function(data){
+                if(data.status == "success"){
+                   var aLobj = data.data;
+                   if(aLobj.status == "0"){
+                       //$("#imgSubmit").hide();
+                       //$("#subBtn").show();
+                       $("#prj_name").remove("disabled");
+                       $("#prj_name_2nd").remove("disabled");
+                       $("#drawing_no").remove("disabled");
+                       //$("#ac_name").remove("disabled");
+                       $("#part_no").remove("disabled");
+                       $("#process_type").remove("disabled");
+                       $("input[name='count']").remove("readonly");
+                       $("input[name='thickness']").remove("readonly");
+                       $("input[name='height']").remove("readonly");
+                       $("input[name='width']").remove("readonly");
+                       $("input[name='single_weight']").remove("readonly");
+                       $("input[name='single_hole']").remove("readonly");
+                       $("input[name='single_length']").remove("readonly");
+                       $("input[name='total']").remove("readonly");
+                       $("input[name='coefficient']").remove("readonly");
+                   }
+                   if(aLobj.status == "1"){
+                       $("#imgSubmit").hide();
+                       //$("#subBtn").hide();
+                       $("#prj_name").attr("disabled","disabled");
+                       $("#prj_name_2nd").attr("disabled","disabled");
+                       $("#drawing_no").attr("disabled","disabled");
+                       //$("#ac_name").attr("disabled","disabled");
+                       $("#part_no").attr("disabled","disabled");
+                       $("#process_type").attr("disabled","disabled");
+                       $("input[name='count']").attr("readonly","readonly");
+                       $("input[name='thickness']").attr("readonly","readonly");
+                       $("input[name='height']").attr("readonly","readonly");
+                       $("input[name='width']").attr("readonly","readonly");
+                       $("input[name='single_weight']").attr("readonly","readonly");
+                       $("input[name='single_hole']").attr("readonly","readonly");
+                       $("input[name='single_length']").attr("readonly","readonly");
+                       $("input[name='total']").attr("readonly","readonly");
+                       $("input[name='coefficient']").attr("readonly","readonly");
+                   }
+                    if(aLobj.process_type == "刨边"){
+                        $("#single_weight_div").show();
+                        $("#single_hole_div").hide();
+                        $("#single_length_div").hide();
+                    }
+                    if(aLobj.process_type == "拼接板钻孔" || aLobj.process_type == "杆件钻孔" || aLobj.process_type == "磁力钻钻孔"
+                        || aLobj.process_type == "其他一" || aLobj.process_type == "其他二" || aLobj.process_type == "其他三" || aLobj.process_type == "其他四" || aLobj.process_type == "其他五"){
+                        $("#single_weight_div").hide();
+                        $("#single_hole_div").show();
+                        $("#single_length_div").hide();
+                    }
+                   /* if(aLobj.process_type == "拼接板钻孔" || aLobj.process_type == "杆件钻孔" || aLobj.process_type == "磁力钻钻孔"){
+                        $("#holeText").text("单件孔数");
+                    }
+                    if(aLobj.process_type == "其他一" || aLobj.process_type == "其他二" || aLobj.process_type == "其他三" || aLobj.process_type == "其他四" || aLobj.process_type == "其他五"){
+                        $("#holeText").text("单件数量");
+                    }*/
+
+                    if(aLobj.process_type == "焰切"){
+                        $("#single_weight_div").hide();
+                        $("#single_hole_div").hide();
+                        $("#single_length_div").show();
+                    }
+                   $("#accLogModelHead").text("查看日志");
+                    $("input[name='id']").val(aLobj.id);
+                    $("#prj_name").val(aLobj.prj_name);
+                    $("#prj_name_2nd").val(aLobj.prj_name_2nd);
+                    $("#drawing_no").val(aLobj.drawing_no);
+                    //$("#ac_name").val(aLobj.ac_name);
+                    $("#part_no").val(aLobj.part_no);
+                    $("#process_type").val(aLobj.process_type);
+                    $("input[name='count']").val(aLobj.count);
+                    $("input[name='thickness']").val(aLobj.thickness);
+                    $("input[name='height']").val(aLobj.height);
+                    $("input[name='width']").val(aLobj.width);
+                    $("input[name='single_weight']").val(aLobj.single_weight);
+                    $("input[name='single_hole']").val(aLobj.single_hole);
+                    $("input[name='single_length']").val(aLobj.single_length);
+                    $("input[name='total']").val(aLobj.total);
+                    $("input[name='coefficient']").val(aLobj.coefficient);
+                    //$("textarea[name='reply']").val(aLobj.reply);
+                   $("#wxAccountLogModal").modal("show");
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    // 点击提交按钮触发
+    function subLog() {
+
+        var id = $("input[name='id']").val();
+        var prj_name = $("#prj_name").val();
+        var prj_name_2nd = $("#prj_name_2nd").val();
+        var drawing_no = $("#drawing_no").val();
+        var part_no = $("#part_no").val();
+        var process_type = $("#process_type").val();
+        var count = $("input[name='count']").val();
+        var thickness = $("input[name='thickness']").val();
+        var height = $("input[name='height']").val();
+        var width = $("input[name='width']").val();
+        var single_weight = $("input[name='single_weight']").val();
+        var single_hole = $("input[name='single_hole']").val();
+        var single_length;
+        var coefficient = $("input[name='coefficient']").val();
+
+        if(process_type == "刨边"){
+            if(!/^-?\d+(\.\d{1,2})?$/.test(single_weight)){
+                //$("input[name='single_weight']").focus();
+                alert("请输入重量(最多包含两位小数)");
+                return false;
+            }
+        }
+        if(process_type == "拼接板钻孔" || process_type == "杆件钻孔" || process_type == "磁力钻钻孔"){
+            if(!/^\d+$/.test(single_hole)){
+                //$("input[name='single_hole']").focus();
+                alert("请输入孔数(只能是正整数)");
+                return false;
+            }
+        }
+        if(process_type == "焰切"){
+            single_length = (parseFloat(height) + parseFloat(width)) * 2;
+        }
+        if(checkValue(prj_name_2nd,part_no,process_type,
+            count,thickness,height,width,single_weight,single_hole,
+            single_length,coefficient)){
+            $.ajax({
+                type:"post",
+                url:"/wx/editLog",
+                cache:false,
+                dataType:"json",
+                data:{
+                    id:id,
+                    prj_name:prj_name,
+                    prj_name_2nd:prj_name_2nd,
+                    drawing_no:drawing_no,
+                    part_no:part_no,
+                    process_type:process_type,
+                    count:count,
+                    thickness:thickness,
+                    height:height,
+                    width:width,
+                    single_weight:single_weight,
+                    single_hole:single_hole,
+                    single_length:single_length,
+                    coefficient:coefficient,
+                    updateType:"sub"
+                },
+                success:function(data){
+                    if(data.status == 'success'){
+                        $("#wxAccountLogModal").modal("hide");
+                        location.reload();
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+    // 点击编辑触发
+    function editLog(id) {
+        location.href = "/wx/toEmpUpdatePage?id="+id;
+    }
+</script>
+
+</html>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.AccountDAO" >
+
+    <!-- 模糊查询的条件 -->
+    <sql id="getAccList_sql_conn">
+        <where>
+            <if test="drawing_no != null">and ya.drawing_no like CONCAT('%', #{drawing_no }, '%')</if>
+            <if test="ac_name != null">and ya.ac_name like CONCAT('%', #{ac_name }, '%')</if>
+        </where>
+    </sql>
+
+
+    <!--按要求获取台账信息列表-->
+    <select id="getAccListByPage" parameterType="pm"  resultType="pm">
+        select
+            ya.ac_id,
+            ya.prj_id,
+            ya.drawing_no,
+            ya.ac_name,
+            ya.part_no,
+            ya.thickness,
+            ya.height,
+            ya.width,
+            ya.count,
+            ya.add_user,
+            ya.add_time,
+            yp.prj_name
+        from
+            yx_account ya
+        left join
+            yx_prj yp
+        on
+            ya.prj_id = yp.prj_id
+        <include refid="getAccList_sql_conn"/>
+        order by
+            ya.add_time
+		limit
+		    #{currIndex},#{pageSize}
+    </select>
+
+    <!--按要求获取台账信息列表条数-->
+    <select id="getAccListCount" parameterType="pm"  resultType="java.lang.Integer">
+        select
+            count(ya.ac_id)
+        from
+            yx_account ya
+        <include refid="getAccList_sql_conn"/>
+    </select>
+
+    <!--添加台账信息-->
+    <insert id="saveAccount" parameterType="pm">
+        insert into yx_account(
+            prj_id,
+            drawing_no,
+            ac_name,
+            part_no,
+            thickness,
+            height,
+            width,
+            count,
+            add_user,
+            add_time
+        ) values(
+            #{prj_id},
+            #{drawing_no},
+            #{ac_name},
+            #{part_no},
+            #{thickness},
+            #{height},
+            #{width},
+            #{count},
+            #{add_user},
+            #{add_time}
+        )
+    </insert>
+
+    <!--根据台账ID查询台账信息-->
+    <select id="findAccount" parameterType="java.lang.String" resultType="pm">
+        select
+            ac_id,
+            prj_id,
+            drawing_no,
+            ac_name,
+            part_no,
+            thickness,
+            height,
+            width,
+            count
+        from
+            yx_account
+        where
+            ac_id = #{ac_id}
+    </select>
+
+    <!--根据台账图号和名称检查台账信息-->
+    <select id="checkAccount" parameterType="pm" resultType="pm">
+        select * from yx_account where drawing_no = #{drawing_no} and ac_name = #{ac_name}
+    </select>
+
+    <!--编辑台账信息-->
+    <update id="editAccount" parameterType="pm">
+        update
+            yx_account
+        set
+            prj_id = #{prj_id},
+            drawing_no = #{drawing_no},
+            ac_name = #{ac_name},
+            part_no = #{part_no},
+            thickness = #{thickness},
+            height = #{height},
+            width = #{width},
+            count = #{count}
+        where
+            ac_id = #{ac_id}
+    </update>
+
+    <!--获取所有台账的图号-->
+    <select id="showDrawingNoList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(drawing_no)
+        from
+            yx_account
+    </select>
+
+    <!--获取所有台账的名称-->
+    <select id="showAcNameList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(ac_name)
+        from
+            yx_account
+    </select>
+
+    <!--获取所有台账的件号-->
+    <select id="showPartNoList" resultType="com.yx.xinruitu.entity.Account">
+        select
+            distinct(part_no)
+        from
+            yx_account
+    </select>
+
+    <!--根据图号、名称、件号获取长、宽、厚-->
+    <select id="getTHWValue" parameterType="pm" resultType="pm">
+        select
+            ac_id,
+            thickness,
+            height,
+            width
+        from
+            yx_account
+        where
+            drawing_no = #{drawing_no} and ac_name = #{ac_name} and part_no = #{part_no}
+    </select>
+
+</mapper>

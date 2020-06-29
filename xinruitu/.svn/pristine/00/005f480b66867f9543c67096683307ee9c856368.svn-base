@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yx.xinruitu.dao.ProjectDAO" >
+
+    <!-- 模糊查询的条件 -->
+    <sql id="getPrjList_sql_conn">
+        <where>
+            <if test="prj_name != null">and prj_name like CONCAT('%', #{prj_name }, '%')</if>
+        </where>
+    </sql>
+
+    <!--按要求获取项目列表信息-->
+    <select id="getProListByPage" parameterType="pm"  resultType="pm">
+        select
+            prj_id,
+            prj_code,
+            prj_name,
+            prj_name_2nd,
+            add_user,
+            add_time
+        from
+            yx_prj
+        <include refid="getPrjList_sql_conn"/>
+        order by
+            add_time
+		limit
+		    #{currIndex},#{pageSize}
+    </select>
+
+    <!--按要求获取项目列表信息条数-->
+    <select id="getProListCount" parameterType="pm"  resultType="java.lang.Integer">
+        select
+            count(0)
+        from
+           yx_prj
+        <include refid="getPrjList_sql_conn"/>
+    </select>
+
+    <!--根据项目名称查询项目信息-->
+    <select id="getProjectByPrjName" parameterType="java.lang.String" resultType="com.yx.xinruitu.entity.Project">
+        select
+            prj_id,
+            prj_code,
+            prj_name,
+            prj_name_2nd,
+            add_user,
+            add_time
+        from
+            yx_prj
+        where
+           prj_name = #{prj_name}
+    </select>
+
+    <!--添加项目信息-->
+    <insert id="saveProject" parameterType="pm">
+        insert into yx_prj(
+            prj_code,
+            prj_name,
+            prj_name_2nd,
+            add_user,
+            add_time
+        ) values(
+            #{prj_code},
+            #{prj_name},
+            #{prj_name_2nd},
+            #{add_user},
+            #{add_time}
+        )
+    </insert>
+
+    <!--根据项目ID查询项目信息-->
+    <select id="findProject" parameterType="java.lang.String" resultType="pm">
+        select
+            prj_id,
+            prj_code,
+            prj_name,
+            prj_name_2nd
+        from
+            yx_prj
+        where
+           prj_id = #{prj_id}
+    </select>
+
+    <!--编辑项目信息-->
+    <update id="editProject" parameterType="pm">
+        update
+            yx_prj
+        set
+            prj_name = #{prj_name},
+            prj_name_2nd = #{prj_name_2nd}
+        where
+            prj_id = #{prj_id}
+    </update>
+
+    <!--获取所有项目的名称和ID-->
+    <select id="getPrjName"  resultType="pm">
+        select
+            prj_id,
+            prj_name,
+            prj_name_2nd
+        from
+            yx_prj
+    </select>
+
+    <!--获取所有项目名称-->
+    <select id="showPrjNameList" resultType="com.yx.xinruitu.entity.Project">
+        select
+            distinct(prj_name)
+        from
+            yx_prj
+    </select>
+
+    <!--获取所有项目二级名称-->
+    <select id="showPrj2ndNameList" resultType="com.yx.xinruitu.entity.Project">
+        select
+            distinct(prj_name_2nd)
+        from
+            yx_prj
+    </select>
+
+    <!--根据项目名称和二级名称获取项目ID-->
+    <select id="getPrjIdValue" parameterType="pm" resultType="java.lang.Long">
+        select
+           prj_id
+        from
+          yx_prj
+        where
+            prj_name = #{prj_name} and prj_name_2nd = #{prj_name_2nd}
+    </select>
+
+
+</mapper>

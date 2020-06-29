@@ -1,0 +1,30 @@
+package com.yx.xinruitu.controller;
+
+import com.yx.xinruitu.controller.base.BaseController;
+import com.yx.xinruitu.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.HashMap;
+
+@Controller
+@RequestMapping("/wx")
+public class WxywController extends BaseController{
+    @Autowired
+    private IUserService userService;
+
+    /**
+     * 查找用户
+     * @return
+     */
+    @RequestMapping(value="/bind",method= RequestMethod.GET)
+    public Object bind(Model model){
+        HashMap<String, Object> result=userService.findbyusername(this.getParameterMap());
+        model.addAttribute("user",result);
+        return "page/user/bind";
+    }
+
+}

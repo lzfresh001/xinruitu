@@ -1,0 +1,46 @@
+package com.yx.xinruitu.service;
+
+import com.yx.xinruitu.util.ParameterMap;
+
+import java.util.HashMap;
+
+/**
+ * ClassName: IAccountLogService
+ * Package: com.yx.xinruitu.service
+ * Decription:
+ * <p>
+ * Date: 2019/12/12 8:45
+ * Author: lzfresh
+ */
+public interface IAccountLogService {
+
+    /**
+     * 按要求获取生产日志信息列表
+     * @param map
+     * @param pageSize
+     * @param currIndex
+     * @return
+     */
+    HashMap<String,Object> getAccLogListByPage(ParameterMap map, int pageSize, int currIndex);
+
+    /**
+     * 添加生产日志
+     * @param pm
+     * @return
+     */
+    HashMap<String, Object> add(ParameterMap pm);
+
+    /**
+     * 根据日志ID查看日志信息
+     * @param parameterMap
+     * @return
+     */
+    HashMap<String, Object> find(ParameterMap parameterMap);
+
+    /**
+     * 更新日志信息
+     * @param parameterMap
+     * @return
+     */
+    HashMap<String, Object> edit(ParameterMap parameterMap);
+}
